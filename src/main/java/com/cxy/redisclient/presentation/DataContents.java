@@ -15,9 +15,9 @@ public class DataContents {
 	public void remove(DataContent o){
 		dataContents.remove(o);
 	}
-	public boolean isOpen(int id, int db, String key){
+	public boolean isOpen(int id, String index, String key){
 		for(DataContent dataContent : dataContents){
-			if(dataContent.getId() == id && dataContent.getDb() == db && dataContent.getKey().equals(key))
+			if(dataContent.getId() == id && dataContent.getIndex() == index && dataContent.getKey().equals(key))
 				return true;
 		}
 		return false;
@@ -25,9 +25,9 @@ public class DataContents {
 	public List<DataContent> getList(){
 		return this.dataContents;
 	}
-	public CTabItem getTabItem(int id, int db, String key){
+	public CTabItem getTabItem(int id, String index, String key){
 		for(DataContent dataContent : dataContents){
-			if(dataContent.getId() == id && dataContent.getDb() == db && dataContent.getKey().equals(key)){
+			if(dataContent.getId() == id && dataContent.getIndex() == index && dataContent.getKey().equals(key)){
 				return dataContent.getTabItem();
 			}
 		}

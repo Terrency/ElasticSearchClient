@@ -38,9 +38,9 @@ public class SetDataContent extends DataContent {
 	private Button btnWatch;
 	private TableColumn tblclmnNewColumn;
 	
-	public SetDataContent(CTabItem tabItem, Image image, int id, String server, int db, String key,
+	public SetDataContent(CTabItem tabItem, Image image, int id, String server, String index, String key,
 			String dataTitle) {
-		super(tabItem, image, id, server, db, key, dataTitle);
+		super(tabItem, image, id, server, index, key, dataTitle);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -66,7 +66,7 @@ public class SetDataContent extends DataContent {
 		});
 		table.setLinesVisible(true);
 		table.addListener(SWT.MouseDown, new EditListener(table, false));
-		pageListener = new PagingListener(table, new SetPage(id, db, key));
+		pageListener = new PagingListener(table, new SetPage(id, index, key));
 		table.addListener(SWT.SetData, pageListener);
 		
 		tblclmnNewColumn = new TableColumn(table, SWT.NONE);
@@ -84,7 +84,7 @@ public class SetDataContent extends DataContent {
 				if (inputDialog.open() == InputDialog.OK) {
 					String values = inputDialog.getValue();
 					String[] setValues = values.split(";");
-					long size = service.addValues(id, db, key, setValues);
+					long size = service.addValues(id, index, key, setValues);
 					if(size == 0)
 						MessageDialog.openInformation(shell.getParent().getShell(), RedisClient.i18nFile.getText(I18nFile.INPUTVALUES), RedisClient.i18nFile.getText(I18nFile.ADDSETVALUES));
 					refresh();
@@ -105,7 +105,7 @@ public class SetDataContent extends DataContent {
 				for (TableItem item : items) {
 					values.add(item.getText());
 				}
-				service.remove(id, db, key, values);
+				service.remove(id, index, key, values);
 				for (TableItem item : items) {
 					item.dispose();
 				}

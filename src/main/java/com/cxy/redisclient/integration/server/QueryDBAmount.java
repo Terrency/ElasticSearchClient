@@ -1,16 +1,17 @@
 package com.cxy.redisclient.integration.server;
 
-import java.util.List;
-
 import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
+import org.elasticsearch.action.ActionFuture;
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequest;
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import redis.clients.jedis.exceptions.JedisException;
 
 public class QueryDBAmount extends JedisCommand {
-	private int dbAmount;
+	private String[] dbAmount;
 
-	public int getDbAmount() {
+	public String[] getDbAmount() {
 		return dbAmount;
 	}
 
@@ -21,11 +22,11 @@ public class QueryDBAmount extends JedisCommand {
 	@Override
 	public void command() {
 		try{
-			List<String> dbs = jedis.configGet("databases");
-			if(dbs.size() > 0)
-				dbAmount = Integer.parseInt(dbs.get(1));
+			ActionFuture<IndicesStatsResponse> isra = esclient.admin().indices().stats(new IndicesStatsRequest().all());
+			if(isra.actionGet().getIndices().size() > 0)
+				dbAmount = isra.actionGet().getIndices().keySet().toArray(new String[isra.actionGet().getIndices().size()]);
 		}catch(JedisException e){
-			dbAmount = 15;
+			dbAmount = new String[0];
 		}
 	}
 

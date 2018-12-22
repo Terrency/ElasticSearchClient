@@ -6,13 +6,13 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class InsertList extends JedisCommand {
-	private int db;
+	private String db;
 	private String key;
 	private boolean beforeAfter;
 	private String pivot;
 	private String value;
 	
-	public InsertList(int id, int db, String key, boolean beforeAfter, String pivot, String value) {
+	public InsertList(int id, String db, String key, boolean beforeAfter, String pivot, String value) {
 		super(id);
 		this.db = db;
 		this.key = key;
@@ -23,7 +23,6 @@ public class InsertList extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		jedis.linsert(key, beforeAfter?LIST_POSITION.BEFORE:LIST_POSITION.AFTER, pivot, value);
 	}
 

@@ -18,7 +18,7 @@ public class UpdateTTLTabItem extends TTLTabItem {
 	private NodeService service = new NodeService();
 	private Button btnApplyButton;
 	
-	public UpdateTTLTabItem(TabFolder parent, final int id, final int db, final String key) {
+	public UpdateTTLTabItem(TabFolder parent, final int id, final String db, final String key) {
 		super(parent);
 		
 		new Label(composite, SWT.NONE);
@@ -27,7 +27,6 @@ public class UpdateTTLTabItem extends TTLTabItem {
 		btnApplyButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				service.expire(id, db, key, getTTL());
 				btnApplyButton.setEnabled(false);
 			}
 		});

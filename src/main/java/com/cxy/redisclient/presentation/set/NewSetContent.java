@@ -25,7 +25,7 @@ public class NewSetContent extends NewDataContent {
 	private Group grpValues;
 	private TableColumn tblclmnNewColumn;
 	
-	public NewSetContent(int id, String server, int db, String key,
+	public NewSetContent(int id, String server, String db, String key,
 			String dataTitle) {
 		super(id, server, db, key, dataTitle);
 		// TODO Auto-generated constructor stub

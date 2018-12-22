@@ -12,13 +12,12 @@ public class ListListPage extends ListPage {
 		return page;
 	}
 	
-	public ListListPage(int id, int db, String key, int start, int end) {
-		super(id, db, key, start, end);
+	public ListListPage(int id, String index, String key, int start, int end) {
+		super(id, index, key, start, end);
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		page = jedis.lrange(key, start, end);
 	}
 

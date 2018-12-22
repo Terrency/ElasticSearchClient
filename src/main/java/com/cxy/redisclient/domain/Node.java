@@ -4,25 +4,25 @@ import com.cxy.redisclient.dto.Order;
 
 public class Node implements Comparable<Node> {
 	protected int id;
-	protected int db;
+	protected String index;
 	protected String key;
 	protected NodeType type;
 	protected Order order;
 	
-	public Node(int id, int db, String key, NodeType type, Order order) {
+	public Node(int id, String index, String key, NodeType type, Order order) {
 		super();
 		this.id = id;
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.type = type;
 		this.order = order;
 	}
 	
-	public Node(int id, int db, String key, NodeType type) {
+	public Node(int id, String index, String key, NodeType type) {
 		super();
 		this.id = id;
-		this.db = db;
-		this.key = key;
+        this.index = index;
+        this.key = key;
 		this.type = type;
 		this.order = Order.Ascend;
 	}
@@ -44,7 +44,7 @@ public class Node implements Comparable<Node> {
 	@Override
 	public boolean equals(Object obj) {
 		Node node = (Node) obj;
-		return node.getKey().equals(this.getKey()) && node.getType().equals(this.getType()) && this.id == node.getId() && this.db == node.getDb();
+		return node.getKey().equals(this.getKey()) && node.getType().equals(this.getType()) && this.id == node.getId() && this.index.equals(node.getIndex());
 	}
 
 	public int getId() {
@@ -55,15 +55,15 @@ public class Node implements Comparable<Node> {
 		this.id = id;
 	}
 
-	public int getDb() {
-		return db;
-	}
+    public String getIndex() {
+        return index;
+    }
 
-	public void setDb(int db) {
-		this.db = db;
-	}
+    public void setIndex(String index) {
+        this.index = index;
+    }
 
-	@Override
+    @Override
 	public int hashCode() {
 		return key.hashCode()+type.hashCode();
 	}
@@ -75,11 +75,8 @@ public class Node implements Comparable<Node> {
 		int result = id1.compareTo(id2);
 		
 		if(result == 0){
-			Integer db1 = new Integer(db);
-			Integer db2 = new Integer(o.getDb());
-			result = db1.compareTo(db2);
-			
-			if(result == 0)
+
+			if(index.equals(o.getIndex()))
 				result = this.getKey().compareTo(o.getKey());
 		}
 				

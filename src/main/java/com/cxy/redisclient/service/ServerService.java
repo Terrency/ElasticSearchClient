@@ -12,6 +12,19 @@ import com.cxy.redisclient.integration.server.QueryServerProperties;
 
 public class ServerService {
 
+    public int add(String clusterName,String name, String host, String port, String password) {
+        try {
+            int id = Integer.parseInt(ConfigFile
+                    .readMaxId(ConfigFile.SERVER_MAXID)) + 1;
+
+            ConfigFile.write(ConfigFile.CLUSTER_NAME + id, clusterName);
+            add(name, host, port, password);
+            return id;
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
 	public int add(String name, String host, String port, String password) {
 		try {
 			int id = Integer.parseInt(ConfigFile
@@ -32,6 +45,7 @@ public class ServerService {
 
 	public void delete(int id) {
 		try {
+			ConfigFile.delete(ConfigFile.CLUSTER_NAME + id);
 			ConfigFile.delete(ConfigFile.NAME + id);
 			ConfigFile.delete(ConfigFile.HOST + id);
 			ConfigFile.delete(ConfigFile.PORT + id);
@@ -48,7 +62,17 @@ public class ServerService {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
+    public void update(int id, String clusterName, String host, String port, String password){
+        updateClusterName(id, clusterName);
+        update(id, host, port, password);
+    }
+    public void updateClusterName(int id, String clusterName){
+        try {
+            ConfigFile.write(ConfigFile.CLUSTER_NAME + id, clusterName);
+        } catch (Exception e){
+            throw  new RuntimeException(e.getMessage());
+        }
+    }
 	public void update(int id, String host, String port, String password) {
 		try {
 			ConfigFile.write(ConfigFile.HOST + id, host);
@@ -59,16 +83,17 @@ public class ServerService {
 		}
 	}
 
-	public void update(int id, String name, String host, String port, String password) {
+	public void update(int id, String clusterName, String name, String host, String port, String password) {
 		update(id, name);
-		update(id, host, port, password);
+		update(id, clusterName, host, port, password);
 	}
 
 	public Server listById(int id) {
 		try {
 			Server server = null;
 			if (ConfigFile.read(ConfigFile.NAME + id) != null)
-				server = new Server(id, ConfigFile.read(ConfigFile.NAME + id),
+				server = new Server(id, ConfigFile.read(ConfigFile.CLUSTER_NAME + id),
+                        ConfigFile.read(ConfigFile.NAME + id),
 						ConfigFile.read(ConfigFile.HOST + id),
 						ConfigFile.read(ConfigFile.PORT + id),
 						ConfigFile.read(ConfigFile.PASSWORD + id));
@@ -96,19 +121,19 @@ public class ServerService {
 		}
 	}
 
-	public int listDBs(int id) {
+	public String[] listDBs(int id) {
 		QueryDBAmount command = new QueryDBAmount(id);
-		command.execute();
+		command.executeEs();
 		return command.getDbAmount();
 	}
 
-	public int listDBs(Server server) throws IOException {
+	public String[] listDBs(Server server) throws IOException {
 		return listDBs(server.getId());
 	}
 	
 	public Map<String, String[]> listInfo(int id) {
 		QueryServerProperties command = new QueryServerProperties(id);
-		command.execute();
+		command.executeJedis();
 		return command.getServerInfo();
 	}
 }

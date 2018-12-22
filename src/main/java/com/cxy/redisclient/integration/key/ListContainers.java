@@ -13,24 +13,24 @@ import com.cxy.redisclient.integration.ConfigFile;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class ListContainers extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private Set<Node> containers = new TreeSet<Node>();
 	private Order order;
 	private boolean flat;
 	private final String separator = ConfigFile.getSeparator();
 	
-	public ListContainers(int id, int db, String key, boolean flat, Order order) {
+	public ListContainers(int id, String index, String key, boolean flat, Order order) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.order = order;
 		this.flat = flat;
 	}
 	
-	public ListContainers(int id, int db, String key, boolean flat) {
+	public ListContainers(int id, String index, String key, boolean flat) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.order = Order.Ascend;
 		this.flat = flat;
@@ -38,7 +38,6 @@ public class ListContainers extends JedisCommand {
 
 	@Override
 	public void command() {
-		jedis.select(db);
 		Set<String> nodekeys = null;
 		int length;
 		if (key != null) {
@@ -56,7 +55,7 @@ public class ListContainers extends JedisCommand {
 				if (ckey.length > 1) {
 					NodeType nodeType = NodeType.CONTAINER;
 	
-					Node node = new Node(id, db, ckey[0], nodeType, order);
+					Node node = new Node(id, index, ckey[0], nodeType, order);
 					containers.add(node);
 				}
 			}
@@ -70,7 +69,7 @@ public class ListContainers extends JedisCommand {
 				if (container.length() > 0) {
 					NodeType nodeType = NodeType.CONTAINER;
 	
-					Node node = new Node(id, db, container, nodeType, order);
+					Node node = new Node(id, index, container, nodeType, order);
 					containers.add(node);
 				}
 			}

@@ -12,7 +12,7 @@ import com.cxy.redisclient.dto.Order;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public abstract class FindContainerKeys extends JedisCommand {
-	protected int db;
+	protected String index;
 	protected String container;
 	protected String keyPattern;
 	protected List<NodeType> valueTypes;
@@ -23,9 +23,9 @@ public abstract class FindContainerKeys extends JedisCommand {
 		return keys;
 	}
 	
-	public FindContainerKeys(int id, int db, String container, String keyPattern) {
+	public FindContainerKeys(int id, String index, String container, String keyPattern) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.container = container;
 		this.keyPattern = keyPattern;
 		this.valueTypes = new ArrayList<NodeType>();
@@ -37,9 +37,9 @@ public abstract class FindContainerKeys extends JedisCommand {
 		this.order = Order.Ascend;
 	}
 	
-	public FindContainerKeys(int id, int db, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
+	public FindContainerKeys(int id, String index, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.container = container;
 		this.keyPattern = keyPattern;
 		this.valueTypes = valueTypes;
@@ -52,7 +52,6 @@ public abstract class FindContainerKeys extends JedisCommand {
 	
 	@Override
 	public void command() {
-		jedis.select(db);
 		Set<String> nodekeys = getResult();
 		
 		Iterator<String> it = nodekeys.iterator();
@@ -61,7 +60,7 @@ public abstract class FindContainerKeys extends JedisCommand {
 			NodeType valueType = getValueType(nextKey);
 
 			if(inValueTypes(valueType)){
-				Node node = new Node(id, db, nextKey, valueType, order);
+				Node node = new Node(id, index, nextKey, valueType, order);
 				keys.add(node);
 			}
 		}

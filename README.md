@@ -1,30 +1,30 @@
-# RedisClient
+# ElasticSearchClient
 
 
-This is a redis client GUI tool written based on Java SWT and Jedis. It's my objective to build the most convenient redis client GUI tool in the world. In the first place, it will facilitate in editing redis data, such as: add, update, delete, search, cut, copy, paste etc.
+这是ElasticSearch图形化客户端工具，使用的是Java SWT工具编写，基于RedisClient项目来编写了这个工具，能够编辑ES数据，添加，修改，删除，查询，剪切，复制，粘贴等等。
 
 ![My image](https://github.com/caoxinyu/RedisClient/raw/windows/src/main/resources/screen.png)
 
 --------
 
-## Features
+## 功能
 
-**Windows Explorer style UI**
+**Windows环境下的图形化界面**
 
-**Multiple Redis version adaptive**
+**多ES版本适配**
 
- 1. Manage redis server, support server password authentication
- 2. Manage redis data favorite
- 3. Manage redis data
- 	* New redis data: string, list, hash, set, sorted set
- 	* Rename redis data 
- 	* Delete redis data
- 	* Update redis data
- 	* Cut, copy paste redis data
- 	* Import, export redis data
- 	* Search redis data
- 	* Order redis data by key, data type, size
- 	* Navigation history
+ 1. 管理ES服务器，支持服务器密码验证
+ 2. 管理ES文档索引
+ 3. 管理ES文档
+ 	* 新建ES文档
+ 	* 修改ES文档
+ 	* 删除ES文档 
+ 	* 更新ES文档
+ 	* 剪切，复制，粘贴ES文档
+ 	* 导入，导出ES文档
+ 	* 搜索ES文档
+ 	* 排序ES文档
+ 	* 查看历史记录
  	* Support time to live
  	* Support paging query redis data
  	* Support multiple selection to delete, cut, copy, export redis data

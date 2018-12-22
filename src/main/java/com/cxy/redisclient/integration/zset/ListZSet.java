@@ -12,19 +12,18 @@ public class ListZSet extends JedisCommand {
 		return values;
 	}
 
-	private int db;
+	private String index;
 	private String key;
 	private Set<Tuple> values;
 	
-	public ListZSet(int id, int db, String key) {
+	public ListZSet(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		values = jedis.zrangeWithScores(key, 0, -1);
 	}
 

@@ -6,10 +6,10 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class AddSet24 extends AddSet {
 
-	public AddSet24(int id, int db, String key, Set<String> values) {
+	public AddSet24(int id, String db, String key, Set<String> values) {
 		super(id, db, key, values);
 	}
-	public AddSet24(int id, int db, String key, String[] values) {
+	public AddSet24(int id, String db, String key, String[] values) {
 		super(id, db, key, values);
 	}
 	protected void addSet() {

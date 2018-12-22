@@ -14,14 +14,14 @@ public class ExportService {
 	
 	private String file;
 	private int id;
-	private int db;
+	private String index;
 	private ContainerKey containerKey;
 	private NodeService service = new NodeService();
 	
-	public ExportService(String file, int id, int db, ContainerKey containerKey){
+	public ExportService(String file, int id, String index, ContainerKey containerKey){
 		this.file = file;
 		this.id = id;
-		this.db = db;
+		this.index = index;
 		this.containerKey = containerKey;
 	}
 	
@@ -30,7 +30,7 @@ public class ExportService {
 		if(exportFile.exists())
 			exportFile.delete();
 		if(!containerKey.isKey()){
-			Set<Node> keys = service.listContainerAllKeys(id, db, containerKey.getContainerKey());
+			Set<Node> keys = service.listContainerAllKeys(id, index, containerKey.getContainerKey());
 			
 			for(Node node: keys) {
 				exportOneKey(node.getKey());
@@ -42,8 +42,8 @@ public class ExportService {
 
 	private void exportOneKey(String key) throws IOException,
 			UnsupportedEncodingException {
-		DumpKey command = new DumpKey(id, db, key);
-		command.execute();
+		DumpKey command = new DumpKey(id, index, key);
+		command.executeJedis();
 		byte[] value = command.getValue();
 		String id = PropertyFile.readMaxId(file, Constant.MAXID);
 		PropertyFile.write(file, Constant.KEY+id, key);

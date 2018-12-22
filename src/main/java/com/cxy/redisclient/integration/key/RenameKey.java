@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class RenameKey extends JedisCommand {
-	private int db;
+	private String index;
 	private String oldKey;
 	private String newKey;
 	private boolean overwritten;
@@ -14,9 +14,9 @@ public class RenameKey extends JedisCommand {
 		return result;
 	}
 
-	public RenameKey(int id, int db, String oldKey, String newKey, boolean overwritten) {
+	public RenameKey(int id, String index, String oldKey, String newKey, boolean overwritten) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.oldKey = oldKey;
 		this.newKey = newKey;
 		this.overwritten = overwritten;
@@ -25,7 +25,6 @@ public class RenameKey extends JedisCommand {
 
 	@Override
 	public void command() {
-		jedis.select(db);
 		if(overwritten)
 			jedis.rename(oldKey, newKey);
 		else

@@ -6,12 +6,12 @@ import com.cxy.redisclient.presentation.RedisClient;
 public class KeyNotExistException extends RuntimeException {
 	private static final long serialVersionUID = 958469726423878744L;
 	protected int id;
-	protected int db;
+	protected String index;
 	private String key;
 	
-	public KeyNotExistException(int id, int db, String key){
+	public KeyNotExistException(int id, String index, String key){
 		this.id = id;
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 

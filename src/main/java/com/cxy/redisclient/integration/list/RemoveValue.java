@@ -4,20 +4,19 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class RemoveValue extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private boolean headTail;
 	
-	public RemoveValue(int id, int db, String key, boolean headTail) {
+	public RemoveValue(int id, String index, String key, boolean headTail) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.headTail = headTail;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		if(headTail){
 			jedis.lpop(key);
 		} else {

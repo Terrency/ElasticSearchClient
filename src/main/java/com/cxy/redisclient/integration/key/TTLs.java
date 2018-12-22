@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class TTLs extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private long second;
 	
@@ -12,15 +12,14 @@ public class TTLs extends JedisCommand {
 		return second;
 	}
 
-	public TTLs(int id, int db, String key) {
+	public TTLs(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		second = jedis.ttl(key);
 		
 	}

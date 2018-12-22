@@ -24,7 +24,7 @@ public class NewHashContent extends NewDataContent {
 	private Table table;
 	private Button btnDelete;
 	
-	public NewHashContent(int id, String server, int db, String key, String dataTitle) {
+	public NewHashContent(int id, String server, String db, String key, String dataTitle) {
 		super(id, server, db, key, dataTitle);
 		// TODO Auto-generated constructor stub
 	}

@@ -26,7 +26,7 @@ public abstract class NewDataContent {
 
 	protected int id;
 	protected String server;
-	protected int db;
+	protected String index;
 	protected String key;
 	
 	private String dataTitle;
@@ -49,10 +49,10 @@ public abstract class NewDataContent {
 	private Label lblKey;
 	protected TabFolder tabFolder;
 	
-	public NewDataContent(int id, String server, int db, String key, String dataTitle){
+	public NewDataContent(int id, String server, String index, String key, String dataTitle){
 		this.id = id;
 		this.server = server;
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.dataTitle = dataTitle;
 	}
@@ -88,7 +88,7 @@ public abstract class NewDataContent {
 		label_2.setText(RedisClient.i18nFile.getText(I18nFile.DATABASE));
 
 		Label label_3 = new Label(dataComposite, SWT.NONE);
-		label_3.setText(String.valueOf(db));
+		label_3.setText(String.valueOf(index));
 
 		lblKey = new Label(dataComposite, SWT.NONE);
 		lblKey.setText(RedisClient.i18nFile.getText(I18nFile.KEY));
@@ -185,7 +185,7 @@ public abstract class NewDataContent {
 		return id;
 	}
 
-	public int getDb() {
-		return db;
+	public String getIndex() {
+		return index;
 	}
 }

@@ -27,7 +27,7 @@ import com.cxy.redisclient.presentation.component.RedisClientDialog;
 public class RenameKeysDialog extends RedisClientDialog {
 	private Text text_2;
 	private String server;
-	private int db;
+	private String index;
 	private String oldContainer;
 	private Button button;
 	
@@ -36,10 +36,10 @@ public class RenameKeysDialog extends RedisClientDialog {
 	 * @param parent
 	 * @param style
 	 */
-	public RenameKeysDialog(Shell parent, Image image, String server, int db, String oldContainer) {
+	public RenameKeysDialog(Shell parent, Image image, String server, String index, String oldContainer) {
 		super(parent, image);
 		this.server = server;
-		this.db = db;
+		this.index = index;
 		this.oldContainer = oldContainer == null?"":oldContainer;
 	}
 
@@ -72,7 +72,7 @@ public class RenameKeysDialog extends RedisClientDialog {
 		lblDatabase.setText(RedisClient.i18nFile.getText(I18nFile.DATABASE));
 		
 		Label label_3 = new Label(composite, SWT.NONE);
-		label_3.setText(String.valueOf(db));
+		label_3.setText(String.valueOf(index));
 		
 		Label lblNewKey = new Label(composite, SWT.NONE);
 		lblNewKey.setText(RedisClient.i18nFile.getText(I18nFile.NEWKEY));

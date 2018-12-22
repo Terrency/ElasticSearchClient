@@ -17,7 +17,7 @@ public abstract class JedisCommandFactory {
 	
 	public JedisCommand getCommand() {
 		QueryServerVersion queryVersion = new QueryServerVersion(id);
-		queryVersion.execute();
+		queryVersion.executeJedis();
 		RedisVersion version = queryVersion.getVersionInfo();
 		
 		for (JedisCommand command: commands) {

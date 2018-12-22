@@ -41,7 +41,7 @@ public abstract class DataContent extends NewDataContent {
 	}
 
 	protected void initObjectTabItem() {
-		RedisObject object = service.getObjectInfo(id, db, key);
+		RedisObject object = service.getObjectInfo(id, index, key);
 		
 		objectTabItem = new TabItem(tabFolder, SWT.NONE);
 		objectTabItem.setText(RedisClient.i18nFile.getText(I18nFile.OBJECT));
@@ -97,11 +97,6 @@ public abstract class DataContent extends NewDataContent {
 		btnApply.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				try{
-					service.expire(id, db, key, getTTL());
-				}finally{
-					setTTLApply(false);
-				}
 			}
 		});
 		btnApply.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -115,7 +110,7 @@ public abstract class DataContent extends NewDataContent {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				try{
-					setTTL((int) service.getTTL(id, db, key));
+					setTTL((int) service.getTTL(id, index, key));
 				}finally{
 					setTTLApply(false);
 				}
@@ -145,11 +140,11 @@ public abstract class DataContent extends NewDataContent {
 			}
 		});
 		
-		setTTL((int) service.getTTL(id, db, key));
+		setTTL((int) service.getTTL(id, index, key));
 	}
 
-	public DataContent(CTabItem tabItem, Image image, int id, String server, int db, String key, String dataTitle) {
-		super(id, server, db, key, dataTitle);
+	public DataContent(CTabItem tabItem, Image image, int id, String server, String index, String key, String dataTitle) {
+		super(id, server, index, key, dataTitle);
 		this.tabItem = tabItem;
 		this.tabItem.setData(this);
 		this.image = image;

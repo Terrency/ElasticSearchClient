@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class GetRefcount extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private Long count;
 	
@@ -12,15 +12,14 @@ public class GetRefcount extends JedisCommand {
 		return count;
 	}
 
-	public GetRefcount(int id, int db, String key) {
+	public GetRefcount(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		count = jedis.objectRefcount(key);
 	}
 

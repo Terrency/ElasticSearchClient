@@ -15,11 +15,8 @@ public class DataNode extends Node  {
 		result = id1.compareTo(id2);
 		
 		if(result == 0){
-			Integer db1 = new Integer(db);
-			Integer db2 = new Integer(o.getDb());
-			result = db1.compareTo(db2);
-			
-			if(result == 0) {
+
+            if(index.equals(o.getIndex()))
 				switch (orderBy) {
 				case NAME:
 					result = this.getKey().compareTo(dataNode.getKey());
@@ -39,7 +36,6 @@ public class DataNode extends Node  {
 				default:
 					break;
 				}
-			}
 		}
 		if (order == Order.Ascend)
 			return result;
@@ -67,9 +63,9 @@ public class DataNode extends Node  {
 		this.persist = persist;
 	}
 	
-	public DataNode(int id, int db, String key, NodeType type, long size, boolean persist,
+	public DataNode(int id, String index, String key, NodeType type, long size, boolean persist,
 			Order order, OrderBy orderBy) {
-		super(id, db, key, type, order);
+		super(id, index, key, type, order);
 		this.size = size;
 		this.persist = persist;
 		this.orderBy = orderBy;

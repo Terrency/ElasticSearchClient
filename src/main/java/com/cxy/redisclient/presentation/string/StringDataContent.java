@@ -30,8 +30,8 @@ public class StringDataContent extends DataContent {
 	private Button btnRefresh;
 
 	public StringDataContent(CTabItem tabItem, Image image, int id,
-			String server, int db, String key, String dataTitle) {
-		super(tabItem, image, id, server, db, key, dataTitle);
+			String server, String index, String key, String dataTitle) {
+		super(tabItem, image, id, server, index, key, dataTitle);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -44,7 +44,7 @@ public class StringDataContent extends DataContent {
 		final Text text_value = new Text(dataComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
 		text_value.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		value = service.readString(id, db, key);
+		value = service.readString(id, index, key);
 				
 		text_value.setText(value);
 		text_value.selectAll();
@@ -87,7 +87,7 @@ public class StringDataContent extends DataContent {
 				String key = getKey();
 				value = text_value.getText();
 
-				service.updateString(id, db, key, value);
+				service.updateString(id, index, key, value);
 				setApply(false);
 				btnCancel.setEnabled(false);
 			}
@@ -105,7 +105,7 @@ public class StringDataContent extends DataContent {
 		btnRefresh.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				value = service.readString(id, db, key);
+				value = service.readString(id, index, key);
 
 				text_value.setText(value);
 			}

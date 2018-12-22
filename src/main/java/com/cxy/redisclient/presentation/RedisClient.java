@@ -109,7 +109,7 @@ public class RedisClient {
 	private Item[] itemsSelected = new Item[] { rootRedisServers };
 	private TreeItem treeItemSelected;
 
-	private static final String DB_PREFIX = "db";
+	private static final String DB_PREFIX = "index";
 	private static final String NODE_TYPE = "type";
 	private static final String NODE_ID = "id";
 	private static final String ITEM_OPENED = "open";
@@ -240,7 +240,7 @@ public class RedisClient {
 		redisImage = new Image(shell.getDisplay(), getClass()
 				.getResourceAsStream("/redis.png"));
 		dbImage = new Image(shell.getDisplay(), getClass().getResourceAsStream(
-				"/db.png"));
+				"/index.png"));
 
 		containerImage = new Image(shell.getDisplay(), getClass()
 				.getResourceAsStream("/container.png"));
@@ -296,7 +296,7 @@ public class RedisClient {
 					event.doit = true;
 			}
 		});
-		shell.setText("RedisClient");
+		shell.setText(i18nFile.getText(I18nFile.ELASTICSEARCHCLIENT));
 		shell.setLayout(new GridLayout(1, false));
 
 	}
@@ -679,8 +679,8 @@ public class RedisClient {
 			}
 			parseContainer(parent, info);
 		} else if (item.getData(NODE_TYPE) == NodeType.DATABASE) {
-			int db = (Integer) item.getData(NODE_ID);
-			info.setDb(db);
+			int index = (Integer) item.getData(NODE_ID);
+//			info.setIndex(index);
 			parseContainer(parent, info);
 		} else if (item.getData(NODE_TYPE) == NodeType.SERVER) {
 			int id = (Integer) item.getData(NODE_ID);
@@ -1070,7 +1070,7 @@ public class RedisClient {
 		}
 
 		Set<Node> nodes = service2.listContainerAllKeys(cinfo.getId(),
-				cinfo.getDb(), container);
+				cinfo.getIndex(), container);
 		str += nodes.size();
 
 		String properties;
@@ -1201,10 +1201,10 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 		String key = cinfo.getContainerStr() + items[0].getText();
 
-		if (!service2.isKeyExist(cinfo.getId(), cinfo.getDb(), key))
-			throw new KeyNotExistException(cinfo.getId(), cinfo.getDb(), key);
+		if (!service2.isKeyExist(cinfo.getId(), cinfo.getIndex(), key))
+			throw new KeyNotExistException(cinfo.getId(), cinfo.getIndex(), key);
 
-		if (!openDataContent.isOpen(cinfo.getId(), cinfo.getDb(), key)) {
+		if (!openDataContent.isOpen(cinfo.getId(), cinfo.getIndex(), key)) {
 			final CTabItem tbtmNewItem = new CTabItem(tabFolder_1, SWT.NONE);
 			tbtmNewItem.setText("New Item");
 			tbtmNewItem.setShowClose(true);
@@ -1228,27 +1228,27 @@ public class RedisClient {
 			if (type == NodeType.STRING) {
 				tbtmNewItem.setImage(strImage);
 				content = new StringDataContent(tbtmNewItem, iconImage, cinfo.getId(),
-						cinfo.getServerName(), cinfo.getDb(), key,
+						cinfo.getServerName(), cinfo.getIndex(), key,
 						I18nFile.STRING);
 
 			} else if (type == NodeType.HASH) {
 				tbtmNewItem.setImage(hashImage);
 				content = new HashDataContent(tbtmNewItem, iconImage, cinfo.getId(),
-						cinfo.getServerName(), cinfo.getDb(), key,
+						cinfo.getServerName(), cinfo.getIndex(), key,
 						I18nFile.HASH);
 			} else if (type == NodeType.LIST) {
 				tbtmNewItem.setImage(listImage);
 				content = new ListDataContent(tbtmNewItem, iconImage, cinfo.getId(),
-						cinfo.getServerName(), cinfo.getDb(), key,
+						cinfo.getServerName(), cinfo.getIndex(), key,
 						I18nFile.LIST);
 			} else if (type == NodeType.SET) {
 				tbtmNewItem.setImage(setImage);
 				content = new SetDataContent(tbtmNewItem, iconImage, cinfo.getId(),
-						cinfo.getServerName(), cinfo.getDb(), key, I18nFile.SET);
+						cinfo.getServerName(), cinfo.getIndex(), key, I18nFile.SET);
 			} else if (type == NodeType.SORTEDSET) {
 				tbtmNewItem.setImage(zsetImage);
 				content = new ZSetDataContent(tbtmNewItem, iconImage, cinfo.getId(),
-						cinfo.getServerName(), cinfo.getDb(), key,
+						cinfo.getServerName(), cinfo.getIndex(), key,
 						I18nFile.ZSET);
 			}
 			content.setShell(composite_2);
@@ -1257,7 +1257,7 @@ public class RedisClient {
 			tabFolder_1.setSelection(tbtmNewItem);
 		} else {
 			tabFolder_1.setSelection(openDataContent.getTabItem(cinfo.getId(),
-					cinfo.getDb(), key));
+					cinfo.getIndex(), key));
 		}
 
 	}
@@ -2033,11 +2033,11 @@ public class RedisClient {
 			find();
 		else {
 			Node node = service2.findNext(fBuffer.getFindNode(),
-					fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(),
+					fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getIndex(),
 					fBuffer.getContainer(), fBuffer.getSearchNodeType(),
 					fBuffer.getPattern(), true);
 			if (node != null) {
-				TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
+				TreeItem selected = gotoDBContainer(node.getId(), node.getIndex(),
 						node.getKey(), true, true);
 				history.add(selected);
 				btnBackward.setEnabled(true);
@@ -2050,14 +2050,14 @@ public class RedisClient {
 						i18nFile.getText(I18nFile.FINDAGAIN));
 				if (ok) {
 					Set<Node> nodes = service2.find(fBuffer.getSearchFrom(),
-							fBuffer.getId(), fBuffer.getDb(),
+							fBuffer.getId(), fBuffer.getIndex(),
 							fBuffer.getContainer(),
 							fBuffer.getSearchNodeType(), fBuffer.getPattern(),
 							true);
 					if (!nodes.isEmpty()) {
 						Node node1 = nodes.iterator().next();
 						TreeItem selected = gotoDBContainer(node1.getId(),
-								node1.getDb(), node1.getKey(), true, true);
+								node1.getIndex(), node1.getKey(), true, true);
 						history.add(selected);
 						btnBackward.setEnabled(true);
 						btnForward.setEnabled(false);
@@ -2078,11 +2078,11 @@ public class RedisClient {
 			find();
 		else {
 			Node node = service2.findNext(fBuffer.getFindNode(),
-					fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getDb(),
+					fBuffer.getSearchFrom(), fBuffer.getId(), fBuffer.getIndex(),
 					fBuffer.getContainer(), fBuffer.getSearchNodeType(),
 					fBuffer.getPattern(), false);
 			if (node != null) {
-				TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
+				TreeItem selected = gotoDBContainer(node.getId(), node.getIndex(),
 						node.getKey(), true, true);
 
 				history.add(selected);
@@ -2096,14 +2096,14 @@ public class RedisClient {
 						i18nFile.getText(I18nFile.FINDAGAIN));
 				if (ok) {
 					Set<Node> nodes = service2.find(fBuffer.getSearchFrom(),
-							fBuffer.getId(), fBuffer.getDb(),
+							fBuffer.getId(), fBuffer.getIndex(),
 							fBuffer.getContainer(),
 							fBuffer.getSearchNodeType(), fBuffer.getPattern(),
 							false);
 					if (!nodes.isEmpty()) {
 						Node node1 = nodes.iterator().next();
 						TreeItem selected = gotoDBContainer(node1.getId(),
-								node1.getDb(), node1.getKey(), true, true);
+								node1.getIndex(), node1.getKey(), true, true);
 
 						history.add(selected);
 						btnBackward.setEnabled(true);
@@ -2137,20 +2137,20 @@ public class RedisClient {
 			NodeType searchFrom = (NodeType) treeItem.getData(NODE_TYPE);
 
 			Set<Node> nodes = service2.find(searchFrom, cinfo.getId(),
-					cinfo.getDb(), cinfo.getContainerStr(),
+					cinfo.getIndex(), cinfo.getContainerStr(),
 					info.getSearchNodeType(), info.getPattern(),
 					info.isForward());
 			if (!nodes.isEmpty()) {
 
 				Node node = nodes.iterator().next();
-				TreeItem selected = gotoDBContainer(node.getId(), node.getDb(),
+				TreeItem selected = gotoDBContainer(node.getId(), node.getIndex(),
 						node.getKey(), true, true);
 				history.add(selected);
 				btnBackward.setEnabled(true);
 				btnForward.setEnabled(false);
 
 				fBuffer = new FindBuffer(node, searchFrom, cinfo.getId(),
-						cinfo.getDb(), cinfo.getContainerStr(),
+						cinfo.getIndex(), cinfo.getContainerStr(),
 						info.getSearchNodeType(), info.getPattern());
 			} else {
 				MessageDialog.openInformation(shell,
@@ -2207,7 +2207,7 @@ public class RedisClient {
 		}
 
 		ExportService service = new ExportService(file, cinfo.getId(),
-				cinfo.getDb(), containerKey);
+				cinfo.getIndex(), containerKey);
 		try {
 			service.export();
 		} catch (IOException e) {
@@ -2234,7 +2234,7 @@ public class RedisClient {
 		String file = dialog.open();
 		if (file != null) {
 			ImportService service = new ImportService(file, cinfo.getId(),
-					cinfo.getDb());
+					cinfo.getIndex());
 			try {
 				service.importFile();
 			} catch (IOException e) {
@@ -2277,9 +2277,8 @@ public class RedisClient {
 						for (int i = 2; i < containers.length; i++) {
 							container += containers[i] + ":";
 						}
-						TreeItem selected = gotoDBContainer(sid, Integer
-								.parseInt(containers[1].replaceFirst(DB_PREFIX,
-										"")), container, favorite.isData(),
+						TreeItem selected = gotoDBContainer(sid, containers[1].replaceFirst(DB_PREFIX,
+										""), container, favorite.isData(),
 								false);
 						history.add(selected);
 						btnBackward.setEnabled(true);
@@ -2315,7 +2314,7 @@ public class RedisClient {
 		Server server = (Server) dialog.open();
 
 		if (server != null) {
-			server.setId(service1.add(server.getName(), server.getHost(),
+			server.setId(service1.add(server.getName(), server.getClusterName(), server.getHost(),
 					server.getPort(), server.getPassword()));
 			TreeItem item = addServerTreeItem(server);
 			serverTreeItemSelected(item, false);
@@ -2334,7 +2333,7 @@ public class RedisClient {
 				server);
 		server = (Server) dialog.open();
 		if (server != null) {
-			service1.update(id, server.getName(), server.getHost(),
+			service1.update(id, server.getClusterName(), server.getName(), server.getHost(),
 					server.getPort(), server.getPassword());
 			TreeItem treeItem = null;
 			if (itemsSelected[0] instanceof TableItem) {
@@ -2415,12 +2414,12 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		RenameKeysDialog dialog = new RenameKeysDialog(shell, iconImage,
-				cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
+				cinfo.getServerName(), cinfo.getIndex(), cinfo.getContainerStr());
 		RenameInfo rinfo = (RenameInfo) dialog.open();
 
 		if (rinfo != null) {
 			Set<String> result = service2.renameContainer(cinfo.getId(),
-					cinfo.getDb(), cinfo.getContainerStr(),
+					cinfo.getIndex(), cinfo.getContainerStr(),
 					rinfo.getNewContainer(), rinfo.isOverwritten(),
 					rinfo.isRenameSub());
 			treeItem.getParentItem().setData(ITEM_OPENED, false);
@@ -2446,7 +2445,7 @@ public class RedisClient {
 
 		parseContainer(treeItem, cinfo);
 
-		service2.deleteContainer(cinfo.getId(), cinfo.getDb(),
+		service2.deleteContainer(cinfo.getId(), cinfo.getIndex(),
 				cinfo.getContainerStr(), deleteSub);
 
 		if (item instanceof TableItem) {
@@ -2521,7 +2520,7 @@ public class RedisClient {
 		NodeType type = (NodeType) itemSelected.getData(NODE_TYPE);
 		if (!(type == NodeType.CONTAINER && flatView)) {
 			Set<Node> cnodes = service2.listContainers(info.getId(),
-					info.getDb(), info.getContainerStr(), flatView);
+					info.getIndex(), info.getContainerStr(), flatView);
 
 			if (itemSelected.getData(ITEM_OPENED) == null
 					|| ((Boolean) (itemSelected.getData(ITEM_OPENED)) == false)) {
@@ -2563,7 +2562,7 @@ public class RedisClient {
 	}
 
 	private String getLocation(ContainerKeyInfo info) {
-		return info.getServerName() + ":" + DB_PREFIX + info.getDb() + ":"
+		return info.getServerName() + ":" + DB_PREFIX + info.getIndex() + ":"
 				+ info.getContainerStr();
 	}
 
@@ -2637,7 +2636,7 @@ public class RedisClient {
 
 		if (!flatView) {
 			Set<Node> cnodes = service2
-					.listContainers(info.getId(), info.getDb(),
+					.listContainers(info.getId(), info.getIndex(),
 							info.getContainerStr(), flatView, clientOrder);
 
 			for (Node node : cnodes) {
@@ -2650,7 +2649,7 @@ public class RedisClient {
 		}
 
 		Set<DataNode> knodes = service2.listContainerKeys(info.getId(),
-				info.getDb(), info.getContainerStr(), false, clientOrder,
+				info.getIndex(), info.getContainerStr(), false, clientOrder,
 				clientOrderBy);
 
 		for (DataNode node1 : knodes) {
@@ -2758,15 +2757,15 @@ public class RedisClient {
 
 		serverItemSelected();
 
-		int amount = service1.listDBs((Integer) selectedItem.getData(NODE_ID));
+		String[] amount = service1.listDBs((Integer) selectedItem.getData(NODE_ID));
 
 		if (selectedItem.getData(ITEM_OPENED) == null
 				|| ((Boolean) (selectedItem.getData(ITEM_OPENED)) == false)) {
 			selectedItem.removeAll();
 
-			for (int i = 0; i < amount; i++) {
+			for (int i = 0; i < amount.length; i++) {
 				TreeItem dbItem = new TreeItem(selectedItem, SWT.NONE);
-				dbItem.setText(DB_PREFIX + i);
+				dbItem.setText(amount[i]);
 				dbItem.setData(NODE_ID, i);
 				dbItem.setData(NODE_TYPE, NodeType.DATABASE);
 				dbItem.setImage(dbImage);
@@ -2777,9 +2776,9 @@ public class RedisClient {
 
 		}
 
-		for (int i = 0; i < amount; i++) {
+		for (int i = 0; i < amount.length; i++) {
 			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(new String[] { DB_PREFIX + i,
+			item.setText(new String[] { amount[i],
 					NodeType.DATABASE.toString() });
 			item.setData(NODE_ID, i);
 			item.setImage(dbImage);
@@ -2826,16 +2825,16 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		NewStringDialog dialog = new NewStringDialog(shell, iconImage,
-				cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
+				cinfo.getId(), cinfo.getServerName(), cinfo.getIndex(),
 				cinfo.getContainerStr());
 		StringInfo info = (StringInfo) dialog.open();
 		if (info != null) {
-			service2.addString(cinfo.getId(), cinfo.getDb(), info.getKey(),
+			service2.addString(cinfo.getId(), cinfo.getIndex(), info.getKey(),
 					info.getValue(), info.getTtl());
 
 			treeItem.setData(ITEM_OPENED, false);
 			dbContainerTreeItemSelected(treeItem, false);
-			gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
+			gotoDBContainer(cinfo.getId(), cinfo.getIndex(), info.getKey(), true,
 					false);
 		}
 
@@ -2853,16 +2852,16 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		NewListDialog dialog = new NewListDialog(shell, iconImage,
-				cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
+				cinfo.getId(), cinfo.getServerName(), cinfo.getIndex(),
 				cinfo.getContainerStr());
 		ListInfo info = (ListInfo) dialog.open();
 		if (info != null) {
-			service4.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
+			service4.add(cinfo.getId(), cinfo.getIndex(), info.getKey(),
 					info.getValues(), info.isHeadTail(), info.isExist(),
 					info.getTtl());
 			treeItem.setData(ITEM_OPENED, false);
 			dbContainerTreeItemSelected(treeItem, false);
-			gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
+			gotoDBContainer(cinfo.getId(), cinfo.getIndex(), info.getKey(), true,
 					false);
 		}
 	}
@@ -2879,14 +2878,14 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		NewSetDialog dialog = new NewSetDialog(shell, iconImage, cinfo.getId(),
-				cinfo.getServerName(), cinfo.getDb(), cinfo.getContainerStr());
+				cinfo.getServerName(), cinfo.getIndex(), cinfo.getContainerStr());
 		SetInfo info = (SetInfo) dialog.open();
 		if (info != null) {
-			service5.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
+			service5.add(cinfo.getId(), cinfo.getIndex(), info.getKey(),
 					info.getValues(), info.getTtl());
 			treeItem.setData(ITEM_OPENED, false);
 			dbContainerTreeItemSelected(treeItem, false);
-			gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
+			gotoDBContainer(cinfo.getId(), cinfo.getIndex(), info.getKey(), true,
 					false);
 		}
 	}
@@ -2903,15 +2902,15 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		NewZSetDialog dialog = new NewZSetDialog(shell, iconImage,
-				cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
+				cinfo.getId(), cinfo.getServerName(), cinfo.getIndex(),
 				cinfo.getContainerStr());
 		ZSetInfo info = (ZSetInfo) dialog.open();
 		if (info != null) {
-			service6.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
+			service6.add(cinfo.getId(), cinfo.getIndex(), info.getKey(),
 					info.getValues(), info.getTtl());
 			treeItem.setData(ITEM_OPENED, false);
 			dbContainerTreeItemSelected(treeItem, false);
-			gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
+			gotoDBContainer(cinfo.getId(), cinfo.getIndex(), info.getKey(), true,
 					false);
 		}
 
@@ -2929,15 +2928,15 @@ public class RedisClient {
 		parseContainer(treeItem, cinfo);
 
 		NewHashDialog dialog = new NewHashDialog(shell, iconImage,
-				cinfo.getId(), cinfo.getServerName(), cinfo.getDb(),
+				cinfo.getId(), cinfo.getServerName(), cinfo.getIndex(),
 				cinfo.getContainerStr());
 		HashInfo info = (HashInfo) dialog.open();
 		if (info != null) {
-			service7.add(cinfo.getId(), cinfo.getDb(), info.getKey(),
+			service7.add(cinfo.getId(), cinfo.getIndex(), info.getKey(),
 					info.getValues(), info.getTtl());
 			treeItem.setData(ITEM_OPENED, false);
 			dbContainerTreeItemSelected(treeItem, false);
-			gotoDBContainer(cinfo.getId(), cinfo.getDb(), info.getKey(), true,
+			gotoDBContainer(cinfo.getId(), cinfo.getIndex(), info.getKey(), true,
 					false);
 		}
 
@@ -2980,11 +2979,11 @@ public class RedisClient {
 		key += itemsSelected[0].getText();
 
 		RenameKeysDialog dialog = new RenameKeysDialog(shell, iconImage,
-				cinfo.getServerName(), cinfo.getDb(), key);
+				cinfo.getServerName(), cinfo.getIndex(), key);
 		RenameInfo rinfo = (RenameInfo) dialog.open();
 
 		if (rinfo != null) {
-			boolean result = service2.renameKey(cinfo.getId(), cinfo.getDb(),
+			boolean result = service2.renameKey(cinfo.getId(), cinfo.getIndex(),
 					key, rinfo.getNewContainer(), rinfo.isOverwritten());
 			dbContainerTreeItemSelected(items[0], false);
 
@@ -3005,7 +3004,7 @@ public class RedisClient {
 		String key = cinfo.getContainerStr();
 		key += item.getText();
 
-		service2.deleteKey(cinfo.getId(), cinfo.getDb(), key);
+		service2.deleteKey(cinfo.getId(), cinfo.getIndex(), key);
 		item.dispose();
 	}
 
@@ -3090,24 +3089,24 @@ public class RedisClient {
 		}
 
 		if (source.getContainer() != null && source.getContainer().isKey()) {
-			String newKey = service2.pasteKey(source.getId(), source.getDb(),
-					source.getContainerStr(), target.getId(), target.getDb(),
+			String newKey = service2.pasteKey(source.getId(), source.getIndex(),
+					source.getContainerStr(), target.getId(), target.getIndex(),
 					target.getContainerStr()
 							+ source.getContainer().getKeyOnly(),
 					pBuffer.isCopy(), true);
 			if (newKey == null)
-				gotoDBContainer(target.getId(), target.getDb(),
+				gotoDBContainer(target.getId(), target.getIndex(),
 						target.getContainerStr()
 								+ source.getContainer().getKeyOnly(), true,
 						true);
 			else
-				gotoDBContainer(target.getId(), target.getDb(), newKey, true,
+				gotoDBContainer(target.getId(), target.getIndex(), newKey, true,
 						true);
 		} else {
-			service2.pasteContainer(source.getId(), source.getDb(),
-					source.getContainerStr(), target.getId(), target.getDb(),
+			service2.pasteContainer(source.getId(), source.getIndex(),
+					source.getContainerStr(), target.getId(), target.getIndex(),
 					target.getContainerStr(), pBuffer.isCopy(), true);
-			gotoDBContainer(target.getId(), target.getDb(),
+			gotoDBContainer(target.getId(), target.getIndex(),
 					target.getContainerStr(), false, true);
 		}
 	}
@@ -3138,10 +3137,10 @@ public class RedisClient {
 		}
 	}
 
-	private TreeItem gotoDBContainer(int id, int db, String container,
+	private TreeItem gotoDBContainer(int id, String index, String container,
 			boolean isKey, boolean refresh) {
 		rootTreeItemSelected(false);
-		TreeItem dbItem = findDBTreeItem(id, db);
+		TreeItem dbItem = findDBTreeItem(id, index);
 		TreeItem dataItemSelected = dbItem;
 
 		dbContainerTreeItemSelected(dbItem, refresh);
@@ -3247,13 +3246,13 @@ public class RedisClient {
 		throw new RuntimeException(i18nFile.getText(I18nFile.FINDSERVER));
 	}
 
-	private TreeItem findDBTreeItem(int id, int db) {
+	private TreeItem findDBTreeItem(int id, String index) {
 		TreeItem server = findServerTreeItem(id);
 
 		serverTreeItemSelected(server, false);
 		TreeItem[] dbItems = server.getItems();
 		for (TreeItem dbItem : dbItems) {
-			if (dbItem.getText().equals(DB_PREFIX + db))
+			if (dbItem.getText().equals(DB_PREFIX + index))
 				return dbItem;
 		}
 		throw new RuntimeException(i18nFile.getText(I18nFile.FINDDB));
@@ -3418,8 +3417,8 @@ public class RedisClient {
 
 	private void updateView(ContainerKeyInfo cinfo) {
 		refreshDB();
-		if (cinfo.getId() != -1 && cinfo.getDb() != -1) {
-			TreeItem item = gotoDBContainer(cinfo.getId(), cinfo.getDb(),
+		if (cinfo.getId() != -1 && !"".equals(cinfo.getIndex())) {
+			TreeItem item = gotoDBContainer(cinfo.getId(), cinfo.getIndex(),
 					cinfo.getContainerStr(), false, false);
 			history.add(item);
 			btnBackward.setEnabled(true);

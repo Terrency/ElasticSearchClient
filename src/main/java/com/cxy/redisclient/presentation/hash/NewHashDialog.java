@@ -18,7 +18,7 @@ import com.cxy.redisclient.presentation.component.NewDataContent;
 import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewHashDialog extends NewDataDialog {
-	public NewHashDialog(Shell parent, Image image, int id, String server, int db,	String key) {
+	public NewHashDialog(Shell parent, Image image, int id, String server, String db,	String key) {
 		super(parent, image, id, server, db, key, 654, 524, RedisClient.i18nFile.getText(I18nFile.NEWHASH), I18nFile.HASH);
 		
 	}
@@ -48,7 +48,7 @@ public class NewHashDialog extends NewDataDialog {
 
 	@Override
 	protected NewDataContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
+			String server, String db, String key, String dataTitle) {
 		return new NewHashContent(id, server, db, key, dataTitle);
 	}
 

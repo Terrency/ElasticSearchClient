@@ -36,96 +36,95 @@ import com.cxy.redisclient.integration.string.ReadString;
 import com.cxy.redisclient.integration.string.UpdateString;
 
 public class NodeService {
-	public void addString(int id, int db, String key, String value, int ttl) {
-		AddString command = new AddString(id, db, key ,value);
-		command.execute();
-		expire(id, db, key, ttl);
+	public void addString(int id, String index, String key, String value, int ttl) {
+		AddString command = new AddString(id, index, key ,value);
+		command.executeJedis();
 	}
 	
-	public String readString(int id, int db, String key) {
-		IsKeyExist command1 = new IsKeyExist(id, db, key);
-		command1.execute();
+	public String readString(int id, String index, String key) {
+		IsKeyExist command1 = new IsKeyExist(id, index, key);
+		command1.executeJedis();
 		if(!command1.isExist())
-			throw new KeyNotExistException(id, db, key);
+			throw new KeyNotExistException(id, index, key);
 		
-		ReadString command = new ReadString(id, db, key);
-		command.execute();
+		ReadString command = new ReadString(id, index, key);
+		command.executeJedis();
 		return command.getValue();
 	}
 	
-	public void updateString(int id, int db, String key, String value) {
-		UpdateString command = new UpdateString(id, db, key, value);
-		command.execute();
+	public void updateString(int id, String index, String key, String value) {
+		UpdateString command = new UpdateString(id, index, key, value);
+		command.executeJedis();
 	}
-	public void deleteKey(int id, int db, String key) {
-		DeleteKey command = new DeleteKey(id, db, key);
-		command.execute();
+	public void deleteKey(int id, String index, String key) {
+		DeleteKey command = new DeleteKey(id, index, key);
+		command.executeJedis();
 	}
 	
-	public boolean renameKey(int id, int db, String oldKey, String newKey, boolean overwritten) {
-		RenameKey command = new RenameKey(id, db, oldKey, newKey, overwritten);
-		command.execute();
+	public boolean renameKey(int id, String index, String oldKey, String newKey, boolean overwritten) {
+		RenameKey command = new RenameKey(id, index, oldKey, newKey, overwritten);
+		command.executeJedis();
 		if(!overwritten && command.getResult() == 0)
 			return false;
 		else
 			return true;
 	}
 	
-	public Set<Node> listKeys(int id, int db) {
-		ListKeys command = new ListKeys(id, db);
-		command.execute();
+	public Set<Node> listKeys(int id, String index) {
+		ListKeys command = new ListKeys(id, index);
+		command.executeJedis();
 		return command.getNodes();
 	}
 	
-	public Set<Node> listContainers(int id, int db, String key, boolean flat, Order order) {
-		ListContainers command = new ListContainers(id, db, key, flat, order);
-		command.execute();
+	public Set<Node> listContainers(int id, String index, String key, boolean flat, Order order) {
+		ListContainers command = new ListContainers(id, index, key, flat, order);
+		command.executeJedis();
 		return command.getContainers();
 		
 	}
 	
-	public Set<Node> listContainers(int id, int db, String key, boolean flat) {
-		ListContainers command = new ListContainers(id, db, key, flat);
-		command.execute();
+	public Set<Node> listContainers(int id, String index, String key, boolean flat) {
+		ListContainers command = new ListContainers(id, index, key, flat);
+		command.executeEs();
 		return command.getContainers();
 		
 	}
 	
-	public Set<DataNode> listContainerKeys(int id, int db, String key, boolean flat, Order order, OrderBy orderBy) {
-		ListContainerKeys command = new ListContainerKeys(id, db, key, flat, order, orderBy);
-		command.execute();
+	public Set<DataNode> listContainerKeys(int id, String index, String key, boolean flat, Order order, OrderBy orderBy) {
+		ListContainerKeys command = new ListContainerKeys(id, index, key, flat, order, orderBy);
+		command.executeJedis();
 		return command.getKeys();
 	}
 	
-	public Set<DataNode> listContainerKeys(int id, int db, String key, boolean flat) {
-		ListContainerKeys command = new ListContainerKeys(id, db, key, flat);
-		command.execute();
+	public Set<DataNode> listContainerKeys(int id, String index, String key, boolean flat) {
+		ListContainerKeys command = new ListContainerKeys(id, index, key, flat);
+		command.executeJedis();
 		return command.getKeys();
 	}
 	
-	public Set<Node> listContainerAllKeys(int id, int db, String container) {
-		FindContainerKeys command = new FindContainerKeysFactory(id, db, container, "*").getListContainerAllKeys();
-		command.execute();
+	public Set<Node> listContainerAllKeys(int id, String index, String container) {
+		FindContainerKeys command = new FindContainerKeysFactory(id, index, container, "*").getListContainerAllKeys();
+		command.executeJedis();
 		return command.getKeys();
 	}
 	
-	public Set<String> renameContainer(int id, int db, String oldContainer, String newContainer, boolean overwritten, boolean renameSub) {
+	public Set<String> renameContainer(int id, String index, String oldContainer, String newContainer, boolean overwritten, boolean renameSub) {
 		Set<String> failContainer = new HashSet<String>();
 		
 		if(renameSub){
-			FindContainerKeys command = new FindContainerKeysFactory(id, db, oldContainer, "*").getListContainerAllKeys();
-			command.execute();
+			FindContainerKeys command = new FindContainerKeysFactory(id, index, oldContainer, "*").getListContainerAllKeys();
+			command.executeJedis();
 			Set<Node> nodes = command.getKeys();
 			
 			for(Node node: nodes) {
-				renameKey(id, db, oldContainer, newContainer, overwritten,
+				renameKey(id, index, oldContainer, newContainer, overwritten,
 						failContainer, node);
 			}
 		}else{
-			Set<DataNode> nodes = listContainerKeys(id, db, oldContainer, true);
+			Set<DataNode> nodes = listContainerKeys(id, index, oldContainer, true);
 			
 			for(Node node: nodes) {
-				renameKey(id, db, oldContainer, newContainer, overwritten,
+				renameKey(id, index, oldContainer, newContainer, overwritten,
 						failContainer, node);
 			}
 		}
@@ -134,44 +133,44 @@ public class NodeService {
 		return failContainer;
 	}
 
-	private void renameKey(int id, int db, String oldContainer,
+	private void renameKey(int id, String index, String oldContainer,
 			String newContainer, boolean overwritten,
 			Set<String> failContainer, Node node) {
 		String newKey = node.getKey().replaceFirst(oldContainer, newContainer);
-		RenameKey command1 = new RenameKey(id, db, node.getKey(), newKey, overwritten);
-		command1.execute();
+		RenameKey command1 = new RenameKey(id, index, node.getKey(), newKey, overwritten);
+		command1.executeJedis();
 		if(!overwritten && command1.getResult() == 0)
 			failContainer.add(newKey);
 	}
 	
-	public void deleteContainer(int id, int db, String container, boolean deleteSub) {
+	public void deleteContainer(int id, String index, String container, boolean deleteSub) {
 		if(deleteSub){
-			FindContainerKeys command = new FindContainerKeysFactory(id, db, container, "*").getListContainerAllKeys();
-			command.execute();
+			FindContainerKeys command = new FindContainerKeysFactory(id, index, container, "*").getListContainerAllKeys();
+			command.executeJedis();
 			Set<Node> nodes = command.getKeys();
 			
 			for(Node node: nodes) {
-				deleteKey(id, db, node.getKey());
+				deleteKey(id, index, node.getKey());
 			}
 		}else{
-			Set<DataNode> nodes = listContainerKeys(id, db, container, true);
+			Set<DataNode> nodes = listContainerKeys(id, index, container, true);
 			
 			for(Node node: nodes) {
-				deleteKey(id, db, node.getKey());
+				deleteKey(id, index, node.getKey());
 			}
 		}
 	}
 	
 	public RedisVersion listServerVersion(int id) {
 		QueryServerVersion command = new QueryServerVersion(id);
-		command.execute();
+		command.executeJedis();
 		return command.getVersionInfo();
 	}
 	
-	public String pasteContainer(int sourceId, int sourceDb, String sourceContainer, int targetId, int targetDb, String targetContainer, boolean copy, boolean overwritten) {
-		Set<Node> nodes = listContainerAllKeys(sourceId, sourceDb, sourceContainer);
+	public String pasteContainer(int sourceId, String sourceIndex, String sourceContainer, int targetId, String targetIndex, String targetContainer, boolean copy, boolean overwritten) {
+		Set<Node> nodes = listContainerAllKeys(sourceId, sourceIndex, sourceContainer);
 		
-		if(sourceId == targetId && sourceDb == targetDb && targetContainer.equals(new ContainerKey(sourceContainer).getUpperContainer())){
+		if(sourceId == targetId && sourceIndex == targetIndex && targetContainer.equals(new ContainerKey(sourceContainer).getUpperContainer())){
 			if(!copy)
 				return null;
 			if(sourceContainer.equals(""))
@@ -181,24 +180,24 @@ public class NodeService {
 				
 				for(Node node: nodes) {
 					String targetKey = node.getKey().replaceFirst(sourceContainer, target);
-					pasteKey(sourceId, sourceDb, node.getKey(), targetId, targetDb, targetKey, copy, overwritten);
+					pasteKey(sourceId, sourceIndex, node.getKey(), targetId, targetIndex, targetKey, copy, overwritten);
 				}
 				return target;
 			}
 		} else {
 			for(Node node: nodes) {
 				String targetKey = targetContainer + new ContainerKey(node.getKey()).getRelativeContainer(sourceContainer);
-				pasteKey(sourceId, sourceDb, node.getKey(), targetId, targetDb, targetKey, copy, overwritten);
+				pasteKey(sourceId, sourceIndex, node.getKey(), targetId, targetIndex, targetKey, copy, overwritten);
 			}
 			return null;
 		}
 	}
 	
 
-	public String pasteKey(int sourceId, int sourceDb, String sourceKey, int targetId, int targetDb, String targetKey, boolean copy, boolean overwritten) {
+	public String pasteKey(int sourceId, String sourceIndex, String sourceKey, int targetId, String targetIndex, String targetKey, boolean copy, boolean overwritten) {
 		boolean changeTarget = false;
 		
-		if(sourceId == targetId && sourceDb == targetDb && sourceKey.equals(targetKey)) {
+		if(sourceId == targetId && sourceIndex == targetIndex && sourceKey.equals(targetKey)) {
 			if(!copy)
 				return null;
 			String key = new ContainerKey(sourceKey).getKeyOnly();
@@ -208,18 +207,18 @@ public class NodeService {
 			changeTarget = true;
 		}
 			
-		if(overwritten && isKeyExist(targetId, targetDb, targetKey)){
-			deleteKey(targetId, targetDb, targetKey);
+		if(overwritten && isKeyExist(targetId, targetIndex, targetKey)){
+			deleteKey(targetId, targetIndex, targetKey);
 		}
-		DumpKey command1 = new DumpKey(sourceId, sourceDb, sourceKey);
-		command1.execute();
+		DumpKey command1 = new DumpKey(sourceId, sourceIndex, sourceKey);
+		command1.executeJedis();
 		byte[] value = command1.getValue();
 		
-		RestoreKey command2 = new RestoreKey(targetId, targetDb, targetKey, value);
-		command2.execute();
+		RestoreKey command2 = new RestoreKey(targetId, targetIndex, targetKey, value);
+		command2.executeJedis();
 		
 		if(!copy)
-			deleteKey(sourceId, sourceDb, sourceKey);
+			deleteKey(sourceId, sourceIndex, sourceKey);
 		
 		if(changeTarget)
 			return targetKey;
@@ -227,14 +226,14 @@ public class NodeService {
 			return null;
 	}
 	
-	public boolean isKeyExist(int id, int db, String key) {
-		IsKeyExist command = new IsKeyExist(id, db, key);
-		command.execute();
+	public boolean isKeyExist(int id, String index, String key) {
+		IsKeyExist command = new IsKeyExist(id, index, key);
+		command.executeJedis();
 		return command.isExist();
 	}
 	
-	public Node findNext(Node findNode, NodeType searchFrom, int id, int db, String container, List<NodeType> searchNodeType, String pattern, boolean forward){
-		Set<Node> nodes = find(searchFrom, id, db, container, searchNodeType, pattern, forward);
+	public Node findNext(Node findNode, NodeType searchFrom, int id, String index, String container, List<NodeType> searchNodeType, String pattern, boolean forward){
+		Set<Node> nodes = find(searchFrom, id, index, container, searchNodeType, pattern, forward);
 		boolean find = false;
 		
 		for(Node node: nodes) {
@@ -245,7 +244,7 @@ public class NodeService {
 		}
 		return null;
 	}
-	public Set<Node> find(NodeType searchFrom, int id, int db, String container, List<NodeType> searchNodeType, String pattern, boolean forward) {
+	public Set<Node> find(NodeType searchFrom, int id, String index, String container, List<NodeType> searchNodeType, String pattern, boolean forward) {
 		switch(searchFrom) {
 		case ROOT:
 			ServerService service = new ServerService();
@@ -266,10 +265,10 @@ public class NodeService {
 			return findKeysFromServer(id, searchNodeType, pattern, forward);
 		
 		case DATABASE:
-			return findKeys(id, db, "", searchNodeType, pattern, forward);
+			return findKeys(id, index, "", searchNodeType, pattern, forward);
 		
 		case CONTAINER:
-			return findKeys(id, db, container, searchNodeType, pattern, forward);
+			return findKeys(id, index, container, searchNodeType, pattern, forward);
 		default:
 			throw new IllegalArgumentException();
 		}
@@ -278,62 +277,54 @@ public class NodeService {
 	private Set<Node> findKeysFromServer(int id, List<NodeType> searchNodeType,
 			String pattern, boolean forward) {
 		ServerService service = new ServerService();
-		int amount = service.listDBs(id);
+		String[] amount = service.listDBs(id);
 		
 		Set<Node> nodes = new TreeSet<Node>();
 		
-		if(forward){
-			for(int i = 0; i < amount; i ++) {
+		/*if(forward){
+			for(int i = 0; i < amount.length; i ++) {
 				nodes.addAll(findKeys(id, i, "", searchNodeType, pattern, true));
 			}
 		}else{
-			for(int i = amount; i > 0 ; i--){
+			for(int i = amount.length; i > 0 ; i--){
 				nodes.addAll(findKeys(id, i-1, "", searchNodeType, pattern, false));
 			}
-		}
+		}*/
 		return nodes;
 	}
 	
 	
-	public Set<Node> findKeys(int id, int db, String container, List<NodeType> searchNodeType, String keyPattern, boolean forward) {
-		FindContainerKeys command = new FindContainerKeysFactory(id, db, container, searchNodeType, keyPattern, forward).getListContainerAllKeys();
-		command.execute();
+	public Set<Node> findKeys(int id, String index, String container, List<NodeType> searchNodeType, String keyPattern, boolean forward) {
+		FindContainerKeys command = new FindContainerKeysFactory(id, index, container, searchNodeType, keyPattern, forward).getListContainerAllKeys();
+		command.executeJedis();
 		return command.getKeys();
 	}
 	
-	public long getSize(int id, int db, String key) {
-		GetSize command = new GetSize(id, db, key);
-		command.execute();
+	public long getSize(int id, String index, String key) {
+		GetSize command = new GetSize(id, index, key);
+		command.executeJedis();
 		return command.getSize();
 		
 	}
-	public long getTTL(int id, int db, String key) {
-		if(!isKeyExist(id, db, key))
-			throw new KeyNotExistException(id, db, key);
+	public long getTTL(int id, String index, String key) {
+		if(!isKeyExist(id, index, key))
+			throw new KeyNotExistException(id, index, key);
 		
-		TTLs command = new TTLs(id, db, key);
-		command.execute();
+		TTLs command = new TTLs(id, index, key);
+		command.executeJedis();
 		long ttl = command.getSecond();
 		
 		if(ttl == -2)
-			throw new KeyNotExistException(id, db, key);
+			throw new KeyNotExistException(id, index, key);
 		return ttl;
 	}
-	public void expire(int id, int db, String key, int ttl){
-		if(!isKeyExist(id, db, key))
-			throw new KeyNotExistException(id, db, key);
-		
-		Expire command1 = new Expire(id, db, key, ttl);
-		command1.execute();
-
-	}
-	public RedisObject getObjectInfo(int id, int db, String key){
-		GetRefcount command1 = new GetRefcount(id, db, key);
-		command1.execute();
-		GetIdletime command2 = new GetIdletime(id, db, key);
-		command2.execute();
-		GetEncoding command3 = new GetEncoding(id, db, key);
-		command3.execute();
+	public RedisObject getObjectInfo(int id, String index, String key){
+		GetRefcount command1 = new GetRefcount(id, index, key);
+		command1.executeJedis();
+		GetIdletime command2 = new GetIdletime(id, index, key);
+		command2.executeJedis();
+		GetEncoding command3 = new GetEncoding(id, index, key);
+		command3.executeJedis();
 		
 		return new RedisObject(command1.getCount(), command3.getEncoding(), command2.getIdleTime());
 	}

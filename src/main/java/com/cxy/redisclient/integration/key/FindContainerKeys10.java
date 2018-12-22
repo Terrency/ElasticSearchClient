@@ -8,12 +8,12 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class FindContainerKeys10 extends FindContainerKeys {
 
-	public FindContainerKeys10(int id, int db, String container, String keyPattern) {
-		super(id, db, container, keyPattern);
+	public FindContainerKeys10(int id, String index, String container, String keyPattern) {
+		super(id, index, container, keyPattern);
 	}
 	
-	public FindContainerKeys10(int id, int db, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
-		super(id, db, container, keyPattern, valueTypes, forward);
+	public FindContainerKeys10(int id, String index, String container, String keyPattern, List<NodeType> valueTypes, boolean forward) {
+		super(id, index, container, keyPattern, valueTypes, forward);
 	}
 
 	protected Set<String> getResult() {

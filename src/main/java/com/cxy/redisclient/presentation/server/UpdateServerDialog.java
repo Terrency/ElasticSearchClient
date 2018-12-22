@@ -17,6 +17,9 @@ public class UpdateServerDialog extends AddServerDialog {
 	@Override
 	protected void createContents() {
 		super.createContents();
+        text_2.setText(server.getClusterName());
+        text_2.selectAll();
+        text_2.setFocus();
 		text_3.setText(server.getName());
 		text_3.selectAll();
 		text_3.setFocus();

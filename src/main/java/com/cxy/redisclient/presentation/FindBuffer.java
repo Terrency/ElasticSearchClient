@@ -9,18 +9,18 @@ public class FindBuffer {
 	private Node findNode;
 	private NodeType searchFrom;
 	private int id;
-	private int db;
+	private String index;
 	private String container;
 	private List<NodeType> searchNodeType;
 	private String pattern;
 	
-	public FindBuffer(Node findNode, NodeType searchFrom, int id, int db,
+	public FindBuffer(Node findNode, NodeType searchFrom, int id, String index,
 			String container, List<NodeType> searchNodeType, String pattern) {
 		super();
 		this.findNode = findNode;
 		this.searchFrom = searchFrom;
 		this.id = id;
-		this.db = db;
+		this.index = index;
 		this.container = container;
 		this.searchNodeType = searchNodeType;
 		this.pattern = pattern;
@@ -42,8 +42,8 @@ public class FindBuffer {
 		return id;
 	}
 
-	public int getDb() {
-		return db; 
+	public String getIndex() {
+		return index; 
 	}
 
 	public String getContainer() {

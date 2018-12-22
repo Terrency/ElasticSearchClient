@@ -10,13 +10,12 @@ import com.cxy.redisclient.integration.ListPage;
 public class ListZSetPage extends ListPage {
 	private Set<Tuple> page;
 	
-	public ListZSetPage(int id, int db, String key, int start, int end) {
-		super(id, db, key, start, end);
+	public ListZSetPage(int id, String index, String key, int start, int end) {
+		super(id, index, key, start, end);
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		page = jedis.zrangeWithScores(key, start, end);
 	}
 

@@ -8,11 +8,11 @@ import com.cxy.redisclient.integration.pubsub.Subscribe;
 public class PubSubService {
 	public void publish(int id, String channel, String message){
 		Publish command = new Publish(id, channel, message);
-		command.execute();
+		command.executeJedis();
 	}
 	
 	public void subscribe(int id, JedisPubSub callback, String channels){
 		Subscribe command = new Subscribe(id, callback, channels);
-		command.execute();
+		command.executeJedis();
 	}
 }

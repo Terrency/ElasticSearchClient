@@ -4,20 +4,19 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class Expire extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private int second;
 	
-	public Expire(int id, int db, String key, int l) {
+	public Expire(int id, String index, String key, int l) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.second = l;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		if(second != -1)
 			jedis.expire(key, second);
 		else

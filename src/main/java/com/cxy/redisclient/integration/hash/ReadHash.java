@@ -6,11 +6,11 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class ReadHash extends JedisCommand {
-	private int db;
+	private String db;
 	private String key;
 	private Map<String, String> value;
 	
-	public ReadHash(int id, int db, String key) {
+	public ReadHash(int id, String db, String key) {
 		super(id);
 		this.db = db;
 		this.key = key;
@@ -18,7 +18,6 @@ public class ReadHash extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		value = jedis.hgetAll(key);
 		
 	}

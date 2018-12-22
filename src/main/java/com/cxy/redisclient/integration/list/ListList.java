@@ -6,7 +6,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class ListList extends JedisCommand {
-	private int db;
+	private String db;
 	private String key;
 	private List<String> values;
 	
@@ -14,7 +14,7 @@ public class ListList extends JedisCommand {
 		return values;
 	}
 
-	public ListList(int id, int db, String key) {
+	public ListList(int id, String db, String key) {
 		super(id);
 		this.db = db;
 		this.key = key;
@@ -22,7 +22,6 @@ public class ListList extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		values = jedis.lrange(key, 0, -1);
 	}
 

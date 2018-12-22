@@ -19,14 +19,14 @@ import com.cxy.redisclient.presentation.component.NewDataDialog;
 public class NewSetDialog extends NewDataDialog {
 	
 	public NewSetDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
+			String db, String key) {
 		super(parent, image, id, server, db, key, 691, 540, RedisClient.i18nFile.getText(I18nFile.NEWSET), I18nFile.SET);
 		
 	}
 
 	@Override
 	protected NewSetContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
+			String server, String db, String key, String dataTitle) {
 		return new NewSetContent(id, server, db, key, dataTitle);
 	}
 

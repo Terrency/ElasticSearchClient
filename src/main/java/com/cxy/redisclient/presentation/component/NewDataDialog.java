@@ -30,7 +30,7 @@ public abstract class NewDataDialog extends RedisClientDialog {
 		}
 	}
 	
-	public NewDataDialog(Shell parent, Image image, int id, String server, int db, String key, int width, int height, String title, String dataTitle) {
+	public NewDataDialog(Shell parent, Image image, int id, String server, String db, String key, int width, int height, String title, String dataTitle) {
 		super(parent, image);
 		this.width = width;
 		this.height = height;
@@ -61,7 +61,7 @@ public abstract class NewDataDialog extends RedisClientDialog {
 		super.createContents();
 	}
 	
-	protected abstract NewDataContent getDataContent(int id, String server, int db, String key, String dataTitle);
+	protected abstract NewDataContent getDataContent(int id, String server, String db, String key, String dataTitle);
 	
 	public void setResult(Object result){
 		this.result = result;

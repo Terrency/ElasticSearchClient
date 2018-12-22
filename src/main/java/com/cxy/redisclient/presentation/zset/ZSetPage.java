@@ -9,18 +9,16 @@ public class ZSetPage extends Page {
 	private Object[] page;
 	private int start;
 	
-	public ZSetPage(int id, int db, String key) {
-		super(id, db, key);
+	public ZSetPage(int id, String index, String key) {
+		super(id, index, key);
 	}
 
-	@Override
 	public void initPage(int start, int end) {
 		this.start = start;
 		ZSetService service = new ZSetService();
-		page = (Object[]) service.getPage(id, db, key, start, end).toArray();
+		page = (Object[]) service.getPage(id, index, key, start, end).toArray();
 	}
 
-	@Override
 	public String[] getText(int row) {
 		String[] values = new String[]{"", ""};
 		

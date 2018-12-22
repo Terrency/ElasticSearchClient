@@ -9,16 +9,16 @@ import com.cxy.redisclient.integration.JedisCommand;
 import com.cxy.redisclient.presentation.RedisClient;
 
 public class AddList extends JedisCommand {
-	protected int db;
+	protected String index;
 	protected String key;
 	private List<String> values;
 	private boolean headTail;
 	private boolean exist;
 
-	public AddList(int id, int db, String key, List<String> values,
+	public AddList(int id, String index, String key, List<String> values,
 			boolean headTail, boolean exist) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.values = values;
 		this.headTail = headTail;
@@ -27,7 +27,6 @@ public class AddList extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		if (jedis.exists(key) && getValueType(key) != NodeType.LIST)
 			throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.LISTEXIST) + key);
 

@@ -6,11 +6,11 @@ import java.util.Set;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public abstract class RemoveSet extends JedisCommand {
-	protected int db;
+	protected String db;
 	protected String key;
 	protected String[] values;
 	
-	public RemoveSet(int id, int db, String key, Set<String> values) {
+	public RemoveSet(int id, String db, String key, Set<String> values) {
 		super(id);
 		this.db = db;
 		this.key = key;

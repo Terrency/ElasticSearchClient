@@ -6,8 +6,8 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class AddZSet24 extends AddZSet {
 
-	public AddZSet24(int id, int db, String key, Map<String, Double> values) {
-		super(id, db, key, values);
+	public AddZSet24(int id, String index, String key, Map<String, Double> values) {
+		super(id, index, key, values);
 	}
 
 	@Override

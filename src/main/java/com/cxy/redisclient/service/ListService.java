@@ -14,72 +14,72 @@ import com.cxy.redisclient.integration.list.SetValue;
 import com.cxy.redisclient.integration.list.UpdateList;
 
 public class ListService {
-	public void add(int id, int db, String key, List<String> values, boolean headTail, boolean exist, int ttl) {
+	public void add(int id, String db, String key, List<String> values, boolean headTail, boolean exist, int ttl) {
 		AddList command = new AddList(id, db, key, values, headTail, exist);
-		command.execute();
+		command.executeJedis();
 		
 		if(ttl != -1){
 			Expire command1 = new Expire(id, db, key, ttl);
-			command1.execute();
+			command1.executeJedis();
 		}
 
 	}
 	
-	public void update(int id, int db, String key, List<String> values, boolean headTail){
+	public void update(int id, String db, String key, List<String> values, boolean headTail){
 		UpdateList command = new UpdateList(id, db, key, values, headTail);
-		command.execute();
+		command.executeJedis();
 	}
 	
-	public List<String> list(int id, int db, String key){
+	public List<String> list(int id, String db, String key){
 		IsKeyExist command1 = new IsKeyExist(id, db, key);
-		command1.execute();
+		command1.executeJedis();
 		if(!command1.isExist())
 			throw new KeyNotExistException(id, db, key);
 		
 		ListList command = new ListList(id, db, key);
-		command.execute();
+		command.executeJedis();
 		return command.getValues();
 	}
 	
-	public void insert(int id, int db, String key, boolean beforeAfter, String pivot, String value){
+	public void insert(int id, String db, String key, boolean beforeAfter, String pivot, String value){
 		InsertList command = new InsertList(id, db, key, beforeAfter, pivot, value);
-		command.execute();
+		command.executeJedis();
 	}
 	
-	public void setValue(int id, int db, String key, int index, String value) {
+	public void setValue(int id, String db, String key, int index, String value) {
 		SetValue command = new SetValue(id, db, key, index, value);
-		command.execute();
+		command.executeJedis();
 	}
 	
-	public void removeFirst(int id, int db, String key) {
+	public void removeFirst(int id, String db, String key) {
 		RemoveValue command = new RemoveValue(id, db, key, true);
-		command.execute();
+		command.executeJedis();
 	}
 	
-	public void removeLast(int id, int db, String key) {
+	public void removeLast(int id, String db, String key) {
 		RemoveValue command = new RemoveValue(id, db, key, false);
-		command.execute();
+		command.executeJedis();
 	}
 	
-	public void addHead(int id, int db, String key, String value){
+	public void addHead(int id, String db, String key, String value){
 		List<String> values = new ArrayList<String>();
 		values.add(value);
 		
 		AddList command = new AddList(id, db, key, values, false, true);
-		command.execute();
+		command.executeJedis();
 		
 	}
-	public void addTail(int id, int db, String key, String value){
+	public void addTail(int id, String db, String key, String value){
 		List<String> values = new ArrayList<String>();
 		values.add(value);
 		
 		AddList command = new AddList(id, db, key, values, true, true);
-		command.execute();
+		command.executeJedis();
 		
 	}
-	public List<String> getPage(int id, int db, String key, int start, int end) {
+	public List<String> getPage(int id, String db, String key, int start, int end) {
 		ListListPage command = new ListListPage(id, db, key, start, end);
-		command.execute();
+		command.executeJedis();
 		return command.getPage(); 
 		
 	}

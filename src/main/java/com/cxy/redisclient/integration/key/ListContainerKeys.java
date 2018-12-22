@@ -13,7 +13,7 @@ import com.cxy.redisclient.integration.ConfigFile;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class ListContainerKeys extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private Set<DataNode> keys = new TreeSet<DataNode>();
 	private Order order;
@@ -24,27 +24,27 @@ public class ListContainerKeys extends JedisCommand {
 		return keys;
 	}
 
-	public ListContainerKeys(int id, int db, String key, boolean flat, Order order, OrderBy orderBy) {
+	public ListContainerKeys(int id, String index, String key, boolean flat, Order order, OrderBy orderBy) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.order = order;
 		this.flat = flat;
 		this.orderBy = orderBy;
 	}
 	
-	public ListContainerKeys(int id, int db, String key, boolean flat, Order order) {
+	public ListContainerKeys(int id, String index, String key, boolean flat, Order order) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.order = order;
 		this.flat = flat;
 		this.orderBy = OrderBy.NAME;
 	}
 	
-	public ListContainerKeys(int id, int db, String key, boolean flat) {
+	public ListContainerKeys(int id, String index, String key, boolean flat) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.flat = flat;
 		this.order = Order.Ascend;
@@ -53,7 +53,6 @@ public class ListContainerKeys extends JedisCommand {
 
 	@Override
 	public void command() {
-		jedis.select(db);
 		Set<String> nodekeys = null;
 		int length;
 		if (key != null) {
@@ -74,9 +73,9 @@ public class ListContainerKeys extends JedisCommand {
 				boolean persist = isPersist(nextKey);
 				DataNode node;
 				if(!flat)
-					node = new DataNode(id, db, ckey[0], nodeType, size, persist, order, orderBy);
+					node = new DataNode(id, index, ckey[0], nodeType, size, persist, order, orderBy);
 				else
-					node = new DataNode(id, db, nextKey, nodeType, size, persist, order, orderBy);
+					node = new DataNode(id, index, nextKey, nodeType, size, persist, order, orderBy);
 				keys.add(node);
 			}
 		}

@@ -49,9 +49,9 @@ public class HashDataContent extends DataContent {
 
 	private TableColumn tblclmnMember;
 	
-	public HashDataContent(CTabItem tabItem, Image image, int id, String server, int db, String key,
+	public HashDataContent(CTabItem tabItem, Image image, int id, String server, String index, String key,
 			String dataTitle) {
-		super(tabItem, image, id, server, db, key, dataTitle);
+		super(tabItem, image, id, server, index, key, dataTitle);
 		currentStatus = Status.Normal;
 	}
 
@@ -271,7 +271,7 @@ public class HashDataContent extends DataContent {
 	}
 
 	private void initHash() {
-		Map<String, String> value = service.read(id, db, key);
+		Map<String, String> value = service.read(id, index, key);
 		
 		Set<Entry<String, String>> set = value.entrySet();
 		Iterator<Entry<String, String>> i = set.iterator();
@@ -432,7 +432,7 @@ public class HashDataContent extends DataContent {
 			fields[i] = items[i].getText(0);
 			items[i].dispose();
 		}
-		service.delField(id, db, key, fields);
+		service.delField(id, index, key, fields);
 		currentStatus = Status.Normal;
 		statusChanged();
 	}
@@ -443,17 +443,17 @@ public class HashDataContent extends DataContent {
 		String value = items[0].getText(1);
 		
 		if(currentStatus == Status.Adding){
-			if(service.isFieldExist(id, db, key, field)){
+			if(service.isFieldExist(id, index, key, field)){
 				boolean ok = MessageDialog.openConfirm(shell.getParent().getShell(), RedisClient.i18nFile.getText(I18nFile.UPDATE), RedisClient.i18nFile.getText(I18nFile.UPDATEFIELD));
 				if(ok){
-					service.setField(id, db, key, field, value);
+					service.setField(id, index, key, field, value);
 					refresh();
 					currentStatus = Status.Normal;
 					statusChanged();
 					gotoField(field);
 				}
 			}else{
-				service.setField(id, db, key, field, value);
+				service.setField(id, index, key, field, value);
 				refresh();
 				currentStatus = Status.Normal;
 				statusChanged();
@@ -461,17 +461,17 @@ public class HashDataContent extends DataContent {
 			}
 		}
 		if(currentStatus == Status.Editing){
-			if(currentData.isFieldChanged(field) && service.isFieldExist(id, db, key, field)){
+			if(currentData.isFieldChanged(field) && service.isFieldExist(id, index, key, field)){
 				boolean ok = MessageDialog.openConfirm(shell.getParent().getShell(), RedisClient.i18nFile.getText(I18nFile.UPDATE), RedisClient.i18nFile.getText(I18nFile.UPDATEFIELD));
 				if(ok){
-					service.setField(id, db, key, field, value);
+					service.setField(id, index, key, field, value);
 					refresh();
 					currentStatus = Status.Normal;
 					statusChanged();
 					gotoField(field);
 				}
 			}else{
-				service.setField(id, db, key, field, value);
+				service.setField(id, index, key, field, value);
 				refresh();
 				currentStatus = Status.Normal;
 				statusChanged();

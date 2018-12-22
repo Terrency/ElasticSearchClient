@@ -4,18 +4,17 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class DelField extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private String[] fields;
-	public DelField(int id, int db, String key, String[] fields) {
+	public DelField(int id, String index, String key, String[] fields) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.fields = fields;
 	}
 	@Override
 	protected void command() {
-		jedis.select(db);
 		jedis.hdel(key, fields);
 		
 	}

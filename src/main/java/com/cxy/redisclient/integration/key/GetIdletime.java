@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class GetIdletime extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private Long idleTime;
 	
@@ -12,15 +12,14 @@ public class GetIdletime extends JedisCommand {
 		return idleTime;
 	}
 
-	public GetIdletime(int id, int db, String key) {
+	public GetIdletime(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		idleTime = jedis.objectIdletime(key);
 		
 	}

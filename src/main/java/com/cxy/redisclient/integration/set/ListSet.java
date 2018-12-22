@@ -6,11 +6,11 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class ListSet extends JedisCommand {
-	protected int db;
+	protected String db;
 	protected String key;
 	protected Set<String> values;
 	
-	public ListSet(int id, int db, String key) {
+	public ListSet(int id, String db, String key) {
 		super(id);
 		this.db = db;
 		this.key = key;
@@ -18,7 +18,6 @@ public class ListSet extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		values = jedis.smembers(key);
 	}
 

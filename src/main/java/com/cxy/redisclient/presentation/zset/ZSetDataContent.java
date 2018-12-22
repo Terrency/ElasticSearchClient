@@ -46,9 +46,9 @@ public class ZSetDataContent extends DataContent {
 	private TableItem currentItem;
 	private Text editor;
 	
-	public ZSetDataContent(CTabItem tabItem, Image image, int id, String server, int db, String key,
+	public ZSetDataContent(CTabItem tabItem, Image image, int id, String server, String index, String key,
 			String dataTitle) {
-		super(tabItem, image, id, server, db, key, dataTitle);
+		super(tabItem, image, id, server, index, key, dataTitle);
 		status = Status.Normal;
 	}
 
@@ -76,7 +76,7 @@ public class ZSetDataContent extends DataContent {
 		table.addListener(SWT.MouseDown, new EditListener(table, false));
 		editListener = new EditListener(table, true);
 
-		pageListener = new PagingListener(table, new ZSetPage(id, db, key));
+		pageListener = new PagingListener(table, new ZSetPage(id, index, key));
 		table.addListener(SWT.SetData, pageListener);
 		
 		tblclmnNewColumn = new TableColumn(table, SWT.NONE);
@@ -95,7 +95,7 @@ public class ZSetDataContent extends DataContent {
 				table.addListener(SWT.MouseDown, editListener);
 				
 				table.removeListener(SWT.SetData, pageListener);
-				pageListener = new PagingListener(table, new ZSetPage(id, db, key), true);
+				pageListener = new PagingListener(table, new ZSetPage(id, index, key), true);
 				table.addListener(SWT.SetData, pageListener);
 				table.clearAll();
 				
@@ -126,7 +126,7 @@ public class ZSetDataContent extends DataContent {
 					for (TableItem item : items) {
 						members[i++] = item.getText(1);
 					}
-					service.removeMembers(id, db, key, members);
+					service.removeMembers(id, index, key, members);
 					
 					for (TableItem item : items) {
 						item.dispose();
@@ -221,7 +221,7 @@ public class ZSetDataContent extends DataContent {
 		table.addListener(SWT.MouseDown, new EditListener(table, false));
 		
 		table.removeListener(SWT.SetData, pageListener);
-		pageListener = new PagingListener(table, new ZSetPage(id, db, key));
+		pageListener = new PagingListener(table, new ZSetPage(id, index, key));
 		table.addListener(SWT.SetData, pageListener);
 		
 		table.clearAll();
@@ -329,7 +329,7 @@ public class ZSetDataContent extends DataContent {
 		}catch(NumberFormatException e1){
 			throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.SCOREERROR) + e1.getLocalizedMessage());
 		}
-		service.addValues(id, db, key, mapValues);
+		service.addValues(id, index, key, mapValues);
 		refresh();
 		gotoMember(member);
 		status = Status.Normal;

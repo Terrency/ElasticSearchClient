@@ -12,7 +12,7 @@ import com.cxy.redisclient.presentation.component.NewDataContent;
 
 public class NewStringContent extends NewDataContent {
 	private Text text_value;
-	public NewStringContent(int id, String server, int db, String key,
+	public NewStringContent(int id, String server, String db, String key,
 			String dataTitle) {
 		super(id, server, db, key, dataTitle);
 		// TODO Auto-generated constructor stub

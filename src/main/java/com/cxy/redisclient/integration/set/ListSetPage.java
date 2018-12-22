@@ -13,13 +13,12 @@ public class ListSetPage extends ListPage {
 	public List<String> getPage() {
 		return page;
 	}
-	public ListSetPage(int id, int db, String key, int start, int end) {
+	public ListSetPage(int id, String db, String key, int start, int end) {
 		super(id, db, key, start, end);
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		SortingParams sp = new SortingParams();
 		sp.alpha();
 		sp.limit(start, end-start);

@@ -25,7 +25,7 @@ public class NewZSetContent extends NewDataContent {
 	private Button btnDelete;
 	private Group grpValues;
 	
-	public NewZSetContent(int id, String server, int db, String key,
+	public NewZSetContent(int id, String server, String db, String key,
 			String dataTitle) {
 		super(id, server, db, key, dataTitle);
 		// TODO Auto-generated constructor stub

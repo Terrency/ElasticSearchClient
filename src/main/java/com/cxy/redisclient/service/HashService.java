@@ -11,45 +11,45 @@ import com.cxy.redisclient.integration.key.Expire;
 import com.cxy.redisclient.integration.key.IsKeyExist;
 
 public class HashService {
-	public void add(int id, int db, String key, Map<String, String> values, int ttl) {
-		AddHash command = new AddHash(id, db, key, values);
-		command.execute();
+	public void add(int id, String index, String key, Map<String, String> values, int ttl) {
+		AddHash command = new AddHash(id, index, key, values);
+		command.executeJedis();
 		
 		if(ttl != -1){
-			Expire command1 = new Expire(id, db, key, ttl);
-			command1.execute();
+			Expire command1 = new Expire(id, index, key, ttl);
+			command1.executeJedis();
 		}
 	}
 	
-	public void update(int id, int db, String key, Map<String, String> values) {
-		AddHash command = new AddHash(id, db, key, values);
-		command.execute();
+	public void update(int id, String index, String key, Map<String, String> values) {
+		AddHash command = new AddHash(id, index, key, values);
+		command.executeJedis();
 	}
 	
-	public Map<String, String> read(int id, int db, String key) {
-		IsKeyExist command1 = new IsKeyExist(id, db, key);
-		command1.execute();
+	public Map<String, String> read(int id, String index, String key) {
+		IsKeyExist command1 = new IsKeyExist(id, index, key);
+		command1.executeJedis();
 		if(!command1.isExist())
-			throw new KeyNotExistException(id, db, key);
+			throw new KeyNotExistException(id, index, key);
 		
-		ReadHash command = new ReadHash(id, db, key);
-		command.execute();
+		ReadHash command = new ReadHash(id, index, key);
+		command.executeJedis();
 		return command.getValue();
 	}
 	
-	public void setField(int id, int db, String key, String field, String value){
-		SetField command = new SetField(id, db, key, field, value);
-		command.execute();
+	public void setField(int id, String index, String key, String field, String value){
+		SetField command = new SetField(id, index, key, field, value);
+		command.executeJedis();
 	}
 	
-	public void delField(int id, int db, String key, String[] fields){
-		DelField command = new DelField(id, db, key, fields);
-		command.execute();
+	public void delField(int id, String index, String key, String[] fields){
+		DelField command = new DelField(id, index, key, fields);
+		command.executeJedis();
 	}
 	
-	public boolean isFieldExist(int id, int db, String key, String field){
-		IsFieldExist command = new IsFieldExist(id, db, key, field);
-		command.execute();
+	public boolean isFieldExist(int id, String index, String key, String field){
+		IsFieldExist command = new IsFieldExist(id, index, key, field);
+		command.executeJedis();
 		return command.isExist();
 	}
 }

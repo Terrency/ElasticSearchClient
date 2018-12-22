@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class GetEncoding extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private String encoding;
 	
@@ -12,15 +12,14 @@ public class GetEncoding extends JedisCommand {
 		return encoding;
 	}
 
-	public GetEncoding(int id, int db, String key) {
+	public GetEncoding(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		encoding = jedis.objectEncoding(key);
 	}
 

@@ -18,14 +18,14 @@ import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewZSetDialog extends NewDataDialog {
 	public NewZSetDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
+			String db, String key) {
 		super(parent, image, id, server, db, key, 586, 531, RedisClient.i18nFile.getText(I18nFile.NEWZSET), I18nFile.ZSET);
 		
 	}
 
 	@Override
 	protected NewZSetContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
+			String server, String db, String key, String dataTitle) {
 		return new NewZSetContent(id, server, db, key, dataTitle);
 	}
 

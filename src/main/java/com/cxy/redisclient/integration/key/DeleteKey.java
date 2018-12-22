@@ -5,18 +5,17 @@ import com.cxy.redisclient.integration.JedisCommand;
 
 
 public class DeleteKey extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	
-	public DeleteKey(int id, int db, String key) {
+	public DeleteKey(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	public void command() {
-		jedis.select(db);
 		jedis.del(key);
 	}
 

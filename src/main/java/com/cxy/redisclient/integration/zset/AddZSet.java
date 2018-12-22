@@ -8,20 +8,19 @@ import com.cxy.redisclient.integration.JedisCommand;
 import com.cxy.redisclient.presentation.RedisClient;
 
 public abstract class AddZSet extends JedisCommand {
-	protected int db;
+	protected String index;
 	protected String key;
 	protected Map<String, Double> values;
 	
-	public AddZSet(int id, int db, String key, Map<String, Double> values) {
+	public AddZSet(int id, String index, String key, Map<String, Double> values) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.values = values;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		if(jedis.exists(key) && getValueType(key) != NodeType.SORTEDSET)
 			throw new RuntimeException(RedisClient.i18nFile.getText(I18nFile.ZSETEXIST)+key);
 		addZSet();

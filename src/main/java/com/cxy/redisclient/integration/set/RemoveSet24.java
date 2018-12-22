@@ -6,14 +6,13 @@ import com.cxy.redisclient.domain.RedisVersion;
 
 public class RemoveSet24 extends RemoveSet {
 
-	public RemoveSet24(int id, int db, String key, Set<String> values) {
+	public RemoveSet24(int id, String db, String key, Set<String> values) {
 		super(id, db, key, values);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		jedis.srem(key, values);
 	}
 

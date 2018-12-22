@@ -18,13 +18,13 @@ import com.cxy.redisclient.presentation.component.NewDataDialog;
 
 public class NewListDialog extends NewDataDialog {
 	public NewListDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
+			String db, String key) {
 		super(parent, image, id, server, db, key, 966, 638, RedisClient.i18nFile.getText(I18nFile.NEWLIST), I18nFile.LIST);
 	}
 
 	@Override
 	protected NewListContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
+			String server, String db, String key, String dataTitle) {
 		return new NewListContent(id, server, db, key, dataTitle);
 	}
 

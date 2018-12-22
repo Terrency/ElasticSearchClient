@@ -15,14 +15,14 @@ import com.cxy.redisclient.presentation.component.NewDataDialog;
 public class NewStringDialog extends NewDataDialog {
 	
 	public NewStringDialog(Shell parent, Image image, int id, String server,
-			int db, String key) {
+			String db, String key) {
 		super(parent, image, id, server, db, key, 622, 284, RedisClient.i18nFile.getText(I18nFile.NEWSTRING), I18nFile.STRING);
 		
 	}
 
 	@Override
 	protected NewStringContent getDataContent(int id,
-			String server, int db, String key, String dataTitle) {
+			String server, String db, String key, String dataTitle) {
 		return new NewStringContent(id, server, db, key, dataTitle);
 	}
 

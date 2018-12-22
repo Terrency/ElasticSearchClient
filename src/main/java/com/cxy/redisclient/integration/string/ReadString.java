@@ -5,7 +5,7 @@ import com.cxy.redisclient.integration.JedisCommand;
 
 
 public class ReadString extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private String value;
 	
@@ -13,15 +13,14 @@ public class ReadString extends JedisCommand {
 		return value;
 	}
 
-	public ReadString(int id, int db, String key) {
+	public ReadString(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	public void command() {
-		jedis.select(db);
 		value = jedis.get(key);
 	}
 

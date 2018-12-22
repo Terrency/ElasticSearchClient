@@ -30,7 +30,7 @@ public class NewListContent extends NewDataContent {
 	private Group grpValues;
 	private TableColumn tblclmnNewColumn;
 	
-	public NewListContent(int id, String server, int db, String key,
+	public NewListContent(int id, String server, String db, String key,
 			String dataTitle) {
 		super(id, server, db, key, dataTitle);
 	}

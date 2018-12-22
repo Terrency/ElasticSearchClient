@@ -4,20 +4,19 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class RestoreKey extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private byte[] value;
 	
-	public RestoreKey(int id, int db, String key, byte[] value) {
+	public RestoreKey(int id, String index, String key, byte[] value) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.value = value;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		jedis.restore(key, 0, value);
 	}
 

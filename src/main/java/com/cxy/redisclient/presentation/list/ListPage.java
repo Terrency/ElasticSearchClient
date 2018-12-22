@@ -11,17 +11,15 @@ public class ListPage extends Page {
 	private int start;
 	private List<String> page;
 	
-	public ListPage(int id, int db, String key) {
-		super(id, db, key);
+	public ListPage(int id, String index, String key) {
+		super(id, index, key);
 	}
 
-	@Override
 	public void initPage(int start, int end) {
 		this.start = start;
-		page = service.getPage(id, db, key, start, end);
+		page = service.getPage(id, index, key, start, end);
 	}
 
-	@Override
 	public String[] getText(int row) {
 		String[] values = new String[]{""};
 		int index = row-start;

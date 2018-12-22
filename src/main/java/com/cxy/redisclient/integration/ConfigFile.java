@@ -6,10 +6,11 @@ import java.io.IOException;
 import com.cxy.redisclient.domain.Language;
 
 public class ConfigFile extends PropertyFile {
-	private final static String propertyFile = System.getProperty("user.home") + File.separatorChar +".RedisClient.properties";
+	private final static String propertyFile = System.getProperty("user.home") + File.separatorChar +".ElasticSearch.properties";
 
 	public static final String PORT = "port";
 	public static final String HOST = "host";
+	public static final String CLUSTER_NAME = "cluster_name";
 	public static final String NAME = "name";
 	public static final String PASSWORD = "password";
 	public static final String SERVER_MAXID = "server_maxid";

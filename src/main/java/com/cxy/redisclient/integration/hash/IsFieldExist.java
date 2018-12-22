@@ -6,12 +6,12 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class IsFieldExist extends JedisCommand {
-	private int db;
+	private String db;
 	private String key;
 	private String field;
 	private boolean exist;
 	
-	public IsFieldExist(int id, int db, String key, String field) {
+	public IsFieldExist(int id, String db, String key, String field) {
 		super(id);
 		this.db = db;
 		this.key = key;
@@ -20,7 +20,6 @@ public class IsFieldExist extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		Set<String> fields = jedis.hkeys(key);
 		exist = fields.contains(field);
 	}

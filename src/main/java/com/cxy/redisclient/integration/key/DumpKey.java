@@ -4,13 +4,13 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class DumpKey extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private byte[] value;
 	
-	public DumpKey(int id, int db, String key) {
+	public DumpKey(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
@@ -20,7 +20,6 @@ public class DumpKey extends JedisCommand {
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		value = jedis.dump(key);
 		
 	}

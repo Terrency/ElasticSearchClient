@@ -4,20 +4,19 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class RemoveMembers extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private String[] members;
 	
-	public RemoveMembers(int id, int db, String key, String[] members) {
+	public RemoveMembers(int id, String index, String key, String[] members) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 		this.members = members;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		jedis.zrem(key, members);
 		
 	}

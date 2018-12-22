@@ -2,9 +2,10 @@ package com.cxy.redisclient.domain;
 
 
 public class Server {
-	public Server(int id, String name, String addr, String port, String password) {
+	public Server(int id, String clusterName, String name, String addr, String port, String password) {
 		super();
 		this.id = id;
+		this.clusterName = clusterName;
 		this.name = name;
 		this.host = addr;
 		this.port = port;
@@ -12,11 +13,12 @@ public class Server {
 	}
 	
 	private int id;
-	private String name;
-	private String host;
-	private String port;
-	private String password;
-		
+    private String clusterName;
+    private String name;
+    private String host;
+    private String port;
+    private String password;
+
 	public int getId() {
 		return id;
 	}
@@ -47,4 +49,12 @@ public class Server {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 }

@@ -47,9 +47,9 @@ public class ListDataContent extends DataContent {
 
 	private TableColumn tblclmnNewColumn;
 	
-	public ListDataContent(CTabItem tabItem, Image image, int id, String server, int db, String key,
+	public ListDataContent(CTabItem tabItem, Image image, int id, String server, String index, String key,
 			String dataTitle) {
-		super(tabItem, image, id, server, db, key, dataTitle);
+		super(tabItem, image, id, server, index, key, dataTitle);
 		status = Status.Normal;
 	}
 
@@ -77,7 +77,7 @@ public class ListDataContent extends DataContent {
 		table.setLinesVisible(true);
 		listener = new EditListener(table, true);
 		table.addListener(SWT.MouseDown, listener);
-		pageListener = new PagingListener(table, new ListPage(id, db, key));
+		pageListener = new PagingListener(table, new ListPage(id, index, key));
 		table.addListener(SWT.SetData, pageListener);
 
 		tblclmnNewColumn = new TableColumn(table, SWT.NONE);
@@ -92,7 +92,7 @@ public class ListDataContent extends DataContent {
 				InputDialog dialog = new InputDialog(shell.getParent().getShell(), RedisClient.i18nFile.getText(I18nFile.INSERTHEAD), RedisClient.i18nFile.getText(I18nFile.INPUTVALUES), "", null);
 				if(dialog.open() == InputDialog.OK){
 				    String value = dialog.getValue();
-				    service.addHead(id, db, key, value);
+				    service.addHead(id, index, key, value);
 				    refresh();
 				}
 			}
@@ -108,7 +108,7 @@ public class ListDataContent extends DataContent {
 				InputDialog dialog = new InputDialog(shell.getParent().getShell(), RedisClient.i18nFile.getText(I18nFile.APPENDTAIL), RedisClient.i18nFile.getText(I18nFile.INPUTVALUES), "", null);
 				if(dialog.open() == InputDialog.OK){
 				    String value = dialog.getValue();
-				    service.addTail(id, db, key, value);
+				    service.addTail(id, index, key, value);
 				    pageListener.setCount();
 				    table.clear(table.getItemCount()-1);
 				    table.setSelection(table.getItemCount()-1);
@@ -126,7 +126,7 @@ public class ListDataContent extends DataContent {
 		btnDeleteHead.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				service.removeFirst(id, db, key);
+				service.removeFirst(id, index, key);
 				refresh();
 			}
 		});
@@ -138,7 +138,7 @@ public class ListDataContent extends DataContent {
 		btnDeleteTail.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				service.removeLast(id, db, key);
+				service.removeLast(id, index, key);
 				pageListener.setCount();
 				table.getItem(table.getItemCount()-1);
 				table.setSelection(table.getItemCount()-1);
@@ -155,7 +155,7 @@ public class ListDataContent extends DataContent {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				TableItem[] items = table.getSelection();
-				service.setValue(id, db, key, table.getSelectionIndex(), items[0].getText());
+				service.setValue(id, index, key, table.getSelectionIndex(), items[0].getText());
 				table.setSelection(-1);
 				currentData.setItem(null);
 				status = Status.Normal;
@@ -251,7 +251,7 @@ public class ListDataContent extends DataContent {
 				break;
 				
 			case Updating:
-				service.setValue(id, db, key, table.indexOf(currentData.getItem()), currentData.getItem().getText());
+				service.setValue(id, index, key, table.indexOf(currentData.getItem()), currentData.getItem().getText());
 				status = Status.Update;
 				statusChanged();
 				break;

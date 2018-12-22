@@ -10,6 +10,7 @@ public class I18nFile extends PropertyFile {
 	private static InputStream propertyFile;
 	private static Properties properties;
 	
+	public static final String ELASTICSEARCHCLIENT = "ELASTICSEARCHCLIENT";
 	public static final String SERVER = "SERVER";
 	public static final String ADD = "ADD";
 	public static final String UPDATE = "UPDATE";
@@ -46,6 +47,7 @@ public class I18nFile extends PropertyFile {
 	public static final String REDISSERVERS = "REDISSERVERS";
 	public static final String ADDFAVORITES = "ADDFAVORITES";
 	public static final String ADDSERVER = "ADDSERVER";
+	public static final String CLUSTERNAME = "CLUSTERNAME";
 	public static final String NAME = "NAME";
 	public static final String TYPE = "TYPE";
 	public static final String SIZE = "SIZE";

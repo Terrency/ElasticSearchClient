@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.cxy.redisclient.presentation.RedisClient;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,7 +24,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.cxy.redisclient.domain.Server;
 import com.cxy.redisclient.integration.I18nFile;
-import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.presentation.component.EditListener;
 import com.cxy.redisclient.presentation.component.RedisClientDialog;
 

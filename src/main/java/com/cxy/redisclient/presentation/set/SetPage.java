@@ -9,18 +9,16 @@ public class SetPage extends Page {
 	private int start;
 	private List<String> page;
 	
-	public SetPage(int id, int db, String key) {
+	public SetPage(int id, String db, String key) {
 		super(id, db, key);
 	}
 
-	@Override
 	public void initPage(int start, int end) {
 		this.start = start;
 		SetService service = new SetService();
-		page = service.getPage(id, db, key, start, end);
+		page = service.getPage(id, index, key, start, end);
 	}
 
-	@Override
 	public String[] getText(int row) {
 		String[] values = new String[]{""};
 		int index = row-start;

@@ -4,7 +4,7 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
 
 public class IsKeyExist extends JedisCommand {
-	private int db;
+	private String index;
 	private String key;
 	private boolean exist;
 	
@@ -12,15 +12,14 @@ public class IsKeyExist extends JedisCommand {
 		return exist;
 	}
 
-	public IsKeyExist(int id, int db, String key) {
+	public IsKeyExist(int id, String index, String key) {
 		super(id);
-		this.db = db;
+		this.index = index;
 		this.key = key;
 	}
 
 	@Override
 	protected void command() {
-		jedis.select(db);
 		exist = jedis.exists(key);
 	}
 
