@@ -8,14 +8,8 @@ public class DataNode extends Node  {
 	public int compareTo(Node o) {
 		int result = 0;
 		DataNode dataNode = (DataNode) o;
-
-		Integer id1 = new Integer(id);
-		Integer id2 = new Integer(o.getId());
-		
-		result = id1.compareTo(id2);
-		
-		if(result == 0){
-
+		return id.compareTo(o.getId());
+		/*if(id.equals(o.getId())){
             if(index.equals(o.getIndex()))
 				switch (orderBy) {
 				case NAME:
@@ -40,7 +34,7 @@ public class DataNode extends Node  {
 		if (order == Order.Ascend)
 			return result;
 		else
-			return result * -1;
+			return result * -1;*/
 	}
 
 	private long size;
@@ -63,7 +57,7 @@ public class DataNode extends Node  {
 		this.persist = persist;
 	}
 	
-	public DataNode(int id, String index, String key, NodeType type, long size, boolean persist,
+	public DataNode(String id, String index, String key, NodeType type, long size, boolean persist,
 			Order order, OrderBy orderBy) {
 		super(id, index, key, type, order);
 		this.size = size;

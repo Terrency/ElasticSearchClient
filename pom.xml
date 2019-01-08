@@ -37,6 +37,11 @@
 			<artifactId>${swt.artifactId}</artifactId>
 			<version>${swt.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
 			<artifactId>jface</artifactId>

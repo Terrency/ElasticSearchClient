@@ -2,6 +2,8 @@ package com.cxy.redisclient.integration.key;
 
 import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
+import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.action.get.GetResponse;
 
 public class IsKeyExist extends JedisCommand {
 	private String index;
@@ -20,7 +22,14 @@ public class IsKeyExist extends JedisCommand {
 
 	@Override
 	protected void command() {
-		exist = jedis.exists(key);
+		GetResponse getResponse = esclient.prepareGet(index, getTypeFromKey(key), getKeyObjectFromKey(key).get("id").getAsString()).execute().actionGet();
+		String result = getResponse.getSourceAsString();
+		if(StringUtils.isBlank(result)){
+		    exist = false;
+        } else {
+
+		    exist = true;
+        }
 	}
 
 	@Override

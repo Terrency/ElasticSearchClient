@@ -25,9 +25,10 @@ public class I18nFile extends PropertyFile {
 	public static final String ZSET = "ZSET";
 	public static final String HASH = "HASH";
 	public static final String RENAME = "RENAME";
-	public static final String DELETE = "DELETE";
+	public static final String MODIFY = "MODIFY";
 	public static final String CUT = "CUT";
-	public static final String COPY = "COPY";
+    public static final String DELETE = "DELETE";
+    public static final String COPY = "COPY";
 	public static final String PASTE = "PASTE";
 	public static final String IMPORT = "IMPORT";
 	public static final String EXPORT = "EXPORT";

@@ -21,7 +21,6 @@ public abstract class RedisClientDialog extends Dialog {
 	/**
 	 * Create the dialog.
 	 * @param parent
-	 * @param style
 	 */
 	public RedisClientDialog(Shell parent, Image image) {
 		super(parent, SWT.SHELL_TRIM | SWT.APPLICATION_MODAL);

@@ -2,6 +2,11 @@ package com.cxy.redisclient.integration.key;
 
 import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.integration.JedisCommand;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 
 public class RenameKey extends JedisCommand {
 	private String index;
@@ -25,10 +30,9 @@ public class RenameKey extends JedisCommand {
 
 	@Override
 	public void command() {
-		if(overwritten)
-			jedis.rename(oldKey, newKey);
-		else
-			result = jedis.renamenx(oldKey, newKey);
+        IndexRequest indexRequest = new IndexRequest(index, getTypeFromKey(newKey), getKeyObjectFromKey(newKey).get("id").getAsString());
+        indexRequest.source(getKeyObjectFromKey(newKey).getAsString());
+        esclient.index(indexRequest).actionGet();
 	}
 
 	@Override

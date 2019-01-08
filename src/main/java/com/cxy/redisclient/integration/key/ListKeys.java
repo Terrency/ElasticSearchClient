@@ -24,14 +24,13 @@ public class ListKeys extends JedisCommand {
 
 	@Override
 	public void command() {
-//		jedis.select(db);
 		Set<String> nodekeys = jedis.keys("*");
 		Iterator<String> it = nodekeys.iterator();
 		while (it.hasNext()) {
 			String key = (String)it.next();
 			NodeType nodeType = getValueType(key);
 			
-			Node node = new Node(id, index, key, nodeType);
+			Node node = new Node(String.valueOf(id), index, key, nodeType);
 			nodes.add(node);
 		}
 	}

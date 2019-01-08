@@ -60,7 +60,7 @@ public abstract class FindContainerKeys extends JedisCommand {
 			NodeType valueType = getValueType(nextKey);
 
 			if(inValueTypes(valueType)){
-				Node node = new Node(id, index, nextKey, valueType, order);
+				Node node = new Node(String.valueOf(id), index, nextKey, valueType, order);
 				keys.add(node);
 			}
 		}

@@ -16,7 +16,7 @@ public class DeleteKey extends JedisCommand {
 
 	@Override
 	public void command() {
-		jedis.del(key);
+	    esclient.prepareDelete(index, getTypeFromKey(key), getKeyObjectFromKey(key).get("id").getAsString()).execute().actionGet();
 	}
 
 	@Override

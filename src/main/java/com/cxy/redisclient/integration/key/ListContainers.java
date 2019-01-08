@@ -3,7 +3,9 @@ package com.cxy.redisclient.integration.key;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 
+import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import com.cxy.redisclient.domain.ContainerKey;
 import com.cxy.redisclient.domain.Node;
 import com.cxy.redisclient.domain.NodeType;
@@ -11,6 +13,12 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.dto.Order;
 import com.cxy.redisclient.integration.ConfigFile;
 import com.cxy.redisclient.integration.JedisCommand;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
 
 public class ListContainers extends JedisCommand {
 	private String index;
@@ -38,43 +46,20 @@ public class ListContainers extends JedisCommand {
 
 	@Override
 	public void command() {
-		Set<String> nodekeys = null;
-		int length;
-		if (key != null) {
-			nodekeys = jedis.keys(key + "*");
-			length = key.length();
-		} else {
-			nodekeys = jedis.keys("*"+separator+"*");
-			length = 0;
-		}
-
-		if(!flat){
-			Iterator<String> it = nodekeys.iterator();
-			while (it.hasNext()) {
-				String[] ckey = it.next().substring(length).split(separator);
-				if (ckey.length > 1) {
-					NodeType nodeType = NodeType.CONTAINER;
-	
-					Node node = new Node(id, index, ckey[0], nodeType, order);
-					containers.add(node);
-				}
-			}
-		}else{
-			Iterator<String> it = nodekeys.iterator();
-			while (it.hasNext()) {
-				String ckey = it.next().substring(length);
-				ContainerKey containerKey = new ContainerKey(ckey);
-				String container = containerKey.getContainerOnly();
-				
-				if (container.length() > 0) {
-					NodeType nodeType = NodeType.CONTAINER;
-	
-					Node node = new Node(id, index, container, nodeType, order);
-					containers.add(node);
-				}
-			}
-		}
-
+        GetMappingsResponse res = null;
+        try {
+            res = esclient.admin().indices().getMappings(new GetMappingsRequest().indices(index)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ImmutableOpenMap<String, MappingMetaData> mapping = res.mappings().get(index);
+        for (ObjectObjectCursor<String, MappingMetaData> c : mapping) {
+            NodeType nodeType = NodeType.CONTAINER;
+            Node node = new Node(String.valueOf(id), index, c.key, nodeType, order);
+            containers.add(node);
+        }
 	}
 
 	public Set<Node> getContainers() {

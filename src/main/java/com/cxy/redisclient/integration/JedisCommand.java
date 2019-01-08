@@ -5,6 +5,8 @@ import com.cxy.redisclient.domain.RedisVersion;
 import com.cxy.redisclient.domain.Server;
 import com.cxy.redisclient.presentation.RedisClient;
 import com.cxy.redisclient.service.ServerService;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -162,4 +164,11 @@ public abstract class JedisCommand implements Comparable<JedisCommand>{
 
 		return RedisVersion.REDIS_2_0;
 	}
+	protected String getTypeFromKey(String key){
+        return key.substring(0, key.indexOf(":"));
+    }
+    protected JsonObject getKeyObjectFromKey(String key){
+	    String k = key.substring(key.indexOf(":") + 1);
+	    return new JsonParser().parse(k).getAsJsonObject();
+    }
 }

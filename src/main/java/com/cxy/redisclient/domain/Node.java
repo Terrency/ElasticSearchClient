@@ -3,13 +3,13 @@ package com.cxy.redisclient.domain;
 import com.cxy.redisclient.dto.Order;
 
 public class Node implements Comparable<Node> {
-	protected int id;
+	protected String id;
 	protected String index;
 	protected String key;
 	protected NodeType type;
 	protected Order order;
 	
-	public Node(int id, String index, String key, NodeType type, Order order) {
+	public Node(String id, String index, String key, NodeType type, Order order) {
 		super();
 		this.id = id;
 		this.index = index;
@@ -18,7 +18,7 @@ public class Node implements Comparable<Node> {
 		this.order = order;
 	}
 	
-	public Node(int id, String index, String key, NodeType type) {
+	public Node(String id, String index, String key, NodeType type) {
 		super();
 		this.id = id;
         this.index = index;
@@ -47,11 +47,11 @@ public class Node implements Comparable<Node> {
 		return node.getKey().equals(this.getKey()) && node.getType().equals(this.getType()) && this.id == node.getId() && this.index.equals(node.getIndex());
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

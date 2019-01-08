@@ -38,32 +38,32 @@ import com.cxy.redisclient.integration.string.UpdateString;
 public class NodeService {
 	public void addString(int id, String index, String key, String value, int ttl) {
 		AddString command = new AddString(id, index, key ,value);
-		command.executeJedis();
+		command.executeEs();
 	}
 	
 	public String readString(int id, String index, String key) {
 		IsKeyExist command1 = new IsKeyExist(id, index, key);
-		command1.executeJedis();
+		command1.executeEs();
 		if(!command1.isExist())
 			throw new KeyNotExistException(id, index, key);
 		
 		ReadString command = new ReadString(id, index, key);
-		command.executeJedis();
+		command.executeEs();
 		return command.getValue();
 	}
 	
 	public void updateString(int id, String index, String key, String value) {
 		UpdateString command = new UpdateString(id, index, key, value);
-		command.executeJedis();
+		command.executeEs();
 	}
 	public void deleteKey(int id, String index, String key) {
 		DeleteKey command = new DeleteKey(id, index, key);
-		command.executeJedis();
+		command.executeEs();
 	}
 	
 	public boolean renameKey(int id, String index, String oldKey, String newKey, boolean overwritten) {
 		RenameKey command = new RenameKey(id, index, oldKey, newKey, overwritten);
-		command.executeJedis();
+		command.executeEs();
 		if(!overwritten && command.getResult() == 0)
 			return false;
 		else
@@ -72,13 +72,13 @@ public class NodeService {
 	
 	public Set<Node> listKeys(int id, String index) {
 		ListKeys command = new ListKeys(id, index);
-		command.executeJedis();
+		command.executeEs();
 		return command.getNodes();
 	}
 	
 	public Set<Node> listContainers(int id, String index, String key, boolean flat, Order order) {
 		ListContainers command = new ListContainers(id, index, key, flat, order);
-		command.executeJedis();
+		command.executeEs();
 		return command.getContainers();
 		
 	}
@@ -92,19 +92,19 @@ public class NodeService {
 	
 	public Set<DataNode> listContainerKeys(int id, String index, String key, boolean flat, Order order, OrderBy orderBy) {
 		ListContainerKeys command = new ListContainerKeys(id, index, key, flat, order, orderBy);
-		command.executeJedis();
+		command.executeEs();
 		return command.getKeys();
 	}
 	
 	public Set<DataNode> listContainerKeys(int id, String index, String key, boolean flat) {
 		ListContainerKeys command = new ListContainerKeys(id, index, key, flat);
-		command.executeJedis();
+		command.executeEs();
 		return command.getKeys();
 	}
 	
 	public Set<Node> listContainerAllKeys(int id, String index, String container) {
 		FindContainerKeys command = new FindContainerKeysFactory(id, index, container, "*").getListContainerAllKeys();
-		command.executeJedis();
+		command.executeEs();
 		return command.getKeys();
 	}
 	
@@ -113,7 +113,7 @@ public class NodeService {
 		
 		if(renameSub){
 			FindContainerKeys command = new FindContainerKeysFactory(id, index, oldContainer, "*").getListContainerAllKeys();
-			command.executeJedis();
+			command.executeEs();
 			Set<Node> nodes = command.getKeys();
 			
 			for(Node node: nodes) {
@@ -138,7 +138,7 @@ public class NodeService {
 			Set<String> failContainer, Node node) {
 		String newKey = node.getKey().replaceFirst(oldContainer, newContainer);
 		RenameKey command1 = new RenameKey(id, index, node.getKey(), newKey, overwritten);
-		command1.executeJedis();
+		command1.executeEs();
 		if(!overwritten && command1.getResult() == 0)
 			failContainer.add(newKey);
 	}
@@ -146,7 +146,7 @@ public class NodeService {
 	public void deleteContainer(int id, String index, String container, boolean deleteSub) {
 		if(deleteSub){
 			FindContainerKeys command = new FindContainerKeysFactory(id, index, container, "*").getListContainerAllKeys();
-			command.executeJedis();
+			command.executeEs();
 			Set<Node> nodes = command.getKeys();
 			
 			for(Node node: nodes) {
@@ -163,7 +163,7 @@ public class NodeService {
 	
 	public RedisVersion listServerVersion(int id) {
 		QueryServerVersion command = new QueryServerVersion(id);
-		command.executeJedis();
+		command.executeEs();
 		return command.getVersionInfo();
 	}
 	
@@ -211,11 +211,11 @@ public class NodeService {
 			deleteKey(targetId, targetIndex, targetKey);
 		}
 		DumpKey command1 = new DumpKey(sourceId, sourceIndex, sourceKey);
-		command1.executeJedis();
+		command1.executeEs();
 		byte[] value = command1.getValue();
 		
 		RestoreKey command2 = new RestoreKey(targetId, targetIndex, targetKey, value);
-		command2.executeJedis();
+		command2.executeEs();
 		
 		if(!copy)
 			deleteKey(sourceId, sourceIndex, sourceKey);
@@ -228,7 +228,7 @@ public class NodeService {
 	
 	public boolean isKeyExist(int id, String index, String key) {
 		IsKeyExist command = new IsKeyExist(id, index, key);
-		command.executeJedis();
+		command.executeEs();
 		return command.isExist();
 	}
 	
@@ -296,13 +296,13 @@ public class NodeService {
 	
 	public Set<Node> findKeys(int id, String index, String container, List<NodeType> searchNodeType, String keyPattern, boolean forward) {
 		FindContainerKeys command = new FindContainerKeysFactory(id, index, container, searchNodeType, keyPattern, forward).getListContainerAllKeys();
-		command.executeJedis();
+		command.executeEs();
 		return command.getKeys();
 	}
 	
 	public long getSize(int id, String index, String key) {
 		GetSize command = new GetSize(id, index, key);
-		command.executeJedis();
+		command.executeEs();
 		return command.getSize();
 		
 	}
@@ -311,7 +311,7 @@ public class NodeService {
 			throw new KeyNotExistException(id, index, key);
 		
 		TTLs command = new TTLs(id, index, key);
-		command.executeJedis();
+		command.executeEs();
 		long ttl = command.getSecond();
 		
 		if(ttl == -2)
@@ -320,11 +320,11 @@ public class NodeService {
 	}
 	public RedisObject getObjectInfo(int id, String index, String key){
 		GetRefcount command1 = new GetRefcount(id, index, key);
-		command1.executeJedis();
+		command1.executeEs();
 		GetIdletime command2 = new GetIdletime(id, index, key);
-		command2.executeJedis();
+		command2.executeEs();
 		GetEncoding command3 = new GetEncoding(id, index, key);
-		command3.executeJedis();
+		command3.executeEs();
 		
 		return new RedisObject(command1.getCount(), command3.getEncoding(), command2.getIdleTime());
 	}

@@ -30,11 +30,12 @@ public class RenameKeysDialog extends RedisClientDialog {
 	private String index;
 	private String oldContainer;
 	private Button button;
-	
-	/**
+    private Text inputKey;
+
+
+    /**
 	 * Create the dialog.
 	 * @param parent
-	 * @param style
 	 */
 	public RenameKeysDialog(Shell parent, Image image, String server, String index, String oldContainer) {
 		super(parent, image);
@@ -47,13 +48,13 @@ public class RenameKeysDialog extends RedisClientDialog {
 	 * Create contents of the dialog.
 	 */
 	protected void createContents() {
-		shell.setText(RedisClient.i18nFile.getText(I18nFile.RENAME));
+		shell.setText(RedisClient.i18nFile.getText(I18nFile.MODIFY));
 		
 		shell.setLayout(new GridLayout(1, false));
-		
+
 		TabFolder tabFolder = new TabFolder(shell, SWT.NONE);
-		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		tabFolder.setSize(290, 122);
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabFolder.setSize(290, 400);
 		
 		TabItem tbtmString = new TabItem(tabFolder, SWT.NONE);
 		tbtmString.setText(RedisClient.i18nFile.getText(I18nFile.KEY));
@@ -73,39 +74,45 @@ public class RenameKeysDialog extends RedisClientDialog {
 		
 		Label label_3 = new Label(composite, SWT.NONE);
 		label_3.setText(String.valueOf(index));
-		
+
+        final Button btnCheckButton = new Button(composite, SWT.CHECK);
+        btnCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        btnCheckButton.setSelection(true);
+        btnCheckButton.setText(RedisClient.i18nFile.getText(I18nFile.OVERWRITTEN));
+
+        final Button btnCheckButton1 = new Button(composite, SWT.CHECK);
+        btnCheckButton1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        btnCheckButton1.setSelection(true);
+        btnCheckButton1.setText(RedisClient.i18nFile.getText(I18nFile.RENAMESUB));
+        final boolean isKey = new ContainerKey(oldContainer).isKey();
+        if(isKey)
+            btnCheckButton1.setVisible(false);
+        else
+            btnCheckButton1.setVisible(true);
+
 		Label lblNewKey = new Label(composite, SWT.NONE);
-		lblNewKey.setText(RedisClient.i18nFile.getText(I18nFile.NEWKEY));
-		
-		text_2 = new Text(composite, SWT.BORDER);
-		text_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-		text_2.setText(oldContainer);
-		text_2.selectAll();
-		text_2.setFocus();
-		text_2.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				String newContainer = text_2.getText() == null?"":text_2.getText();
-				if(newContainer.equals(oldContainer)) 
-					button.setEnabled(false);
-				else
-					button.setEnabled(true);
-			}
-		});
-		
-		final Button btnCheckButton = new Button(composite, SWT.CHECK);
-		btnCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnCheckButton.setSelection(true);
-		btnCheckButton.setText(RedisClient.i18nFile.getText(I18nFile.OVERWRITTEN));
-		
-		final Button btnCheckButton1 = new Button(composite, SWT.CHECK);
-		btnCheckButton1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		btnCheckButton1.setSelection(true);
-		btnCheckButton1.setText(RedisClient.i18nFile.getText(I18nFile.RENAMESUB));
-		final boolean isKey = new ContainerKey(oldContainer).isKey();
-		if(isKey)
-			btnCheckButton1.setVisible(false);
-		else
-			btnCheckButton1.setVisible(true);
+		lblNewKey.setText(RedisClient.i18nFile.getText(I18nFile.VALUES));
+
+        inputKey = new Text(composite, SWT.BORDER | SWT.WRAP
+                | SWT.V_SCROLL | SWT.MULTI);
+        GridData g = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
+        g.widthHint = 100;
+        g.heightHint = 300;
+        inputKey.setLayoutData(g);
+        inputKey.setText(oldContainer);
+        inputKey.selectAll();
+        inputKey.setFocus();
+        inputKey.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                String newContainer = inputKey.getText() == null?"":inputKey.getText();
+                if(newContainer.equals(oldContainer))
+                    button.setEnabled(false);
+                else
+                    button.setEnabled(true);
+            }
+        });
+
+
 		
 		Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
@@ -116,7 +123,7 @@ public class RenameKeysDialog extends RedisClientDialog {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
-				String newContainer = text_2.getText();
+				String newContainer = inputKey.getText();
 				boolean overwritten = btnCheckButton.getSelection(); 
 				boolean renameSub = btnCheckButton1.getSelection(); 
 				
@@ -142,6 +149,9 @@ public class RenameKeysDialog extends RedisClientDialog {
 			}
 		});
 		button_1.setText(RedisClient.i18nFile.getText(I18nFile.CANCEL));
+
+        minWidth = 600;
+        minHeight = 500;
 
 		super.createContents();
 	}
