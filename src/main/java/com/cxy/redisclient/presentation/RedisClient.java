@@ -1965,7 +1965,7 @@ public class RedisClient {
 		Menu menu_2 = new Menu(mntmHelp);
 		mntmHelp.setMenu(menu_2);
 
-		MenuItem mntmDonation = new MenuItem(menu_2, SWT.NONE);
+		/*MenuItem mntmDonation = new MenuItem(menu_2, SWT.NONE);
 		mntmDonation.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -1974,7 +1974,7 @@ public class RedisClient {
 				dialog.open();
 			}
 		});
-		mntmDonation.setText(i18nFile.getText(I18nFile.DONATION));
+		mntmDonation.setText(i18nFile.getText(I18nFile.DONATION));*/
 
 		new MenuItem(menu_2, SWT.SEPARATOR);
 

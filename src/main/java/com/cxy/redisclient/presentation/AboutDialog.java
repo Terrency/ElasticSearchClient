@@ -64,7 +64,7 @@ public class AboutDialog extends RedisClientDialog {
 		lblNewLabel.setFont(SWTResourceManager.getFont("Arial", 20, SWT.NORMAL));
 		lblNewLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		lblNewLabel.setBounds(0, 0, 61, 17);
-		lblNewLabel.setText("<a href=\"https://github.com/caoxinyu/RedisClient\">RedisClient for Windows</a>");
+		lblNewLabel.setText("<a href=\"https://github.com/Terrency/ElasticSearchClient.git\">ElasticSearchClient for Windows</a>");
 		
 		
 		Label label = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -83,7 +83,7 @@ public class AboutDialog extends RedisClientDialog {
 		
 		Link link = new Link(composite, SWT.NONE);
 		link.addSelectionListener(openUrl);
-		link.setText("<a href=\"mailto:caoxinyu@gmail.com\">" + RedisClient.i18nFile.getText(I18nFile.CAOXINYU) + "</a>");
+		link.setText("<a href=\"mailto:terrency.mei@gmail.com\">" + RedisClient.i18nFile.getText(I18nFile.CAOXINYU) + "</a>");
 		new Label(composite, SWT.NONE);
 		
 		Label lblReportIssue = new Label(composite, SWT.NONE);
@@ -91,7 +91,7 @@ public class AboutDialog extends RedisClientDialog {
 		
 		Link link_1 = new Link(composite, SWT.NONE);
 		link_1.addSelectionListener(openUrl);
-		link_1.setText("<a href=\"https://github.com/caoxinyu/redisclient/issues?state=open\">" + RedisClient.i18nFile.getText(I18nFile.CLICK) + "</a>");
+		link_1.setText("<a href=\"https://github.com/Terrency/ElasticSearchClient/issues?state=open\">" + RedisClient.i18nFile.getText(I18nFile.CLICK) + "</a>");
 		new Label(composite, SWT.NONE);
 		
 		Label lblStar = new Label(composite, SWT.NONE);
@@ -99,7 +99,7 @@ public class AboutDialog extends RedisClientDialog {
 		
 		Link link_2 = new Link(composite, SWT.NONE);
 		link_2.addSelectionListener(openUrl);
-		link_2.setText("<a href=\"https://github.com/caoxinyu/RedisClient/stargazers\">" + RedisClient.i18nFile.getText(I18nFile.CLICK) + "</a>");
+		link_2.setText("<a href=\"https://github.com/Terrency/ElasticSearchClient/stargazers\">" + RedisClient.i18nFile.getText(I18nFile.CLICK) + "</a>");
 		
 		Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
